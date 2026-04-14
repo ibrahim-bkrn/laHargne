@@ -13,6 +13,11 @@ const routes = [
     component: () => import('../views/PropositionsView.vue')
   },
   {
+    path: '/flyer',
+    name: 'flyer',
+    component: () => import('../views/FlyerView.vue')
+  },
+  {
     path: '/slogan/1',
     name: 'slogan-1',
     component: () => import('../views/slogan/Option1View.vue')

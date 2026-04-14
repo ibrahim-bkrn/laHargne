@@ -1,21 +1,21 @@
 <script setup>
-const imageDebut = '/images/imageDecor.png'
-const imageFin   = '/images/imageProduitNoir.png'
+const imageDebut = '/images/imgProcess/aout2025.PNG'
+const imageFin   = '/images/imgProcess/avril2026.JPG'
 
 const photosA = [
-  '/images/imagePalge.png',
-  '/images/imageProduitBleue.png',
-  '/images/imageProduitGris.png',
-  '/images/IMG_8079.JPEG',
-  '/images/imageProduitGris - Copie.png',
+  '/images/imgProcess/1.1.PNG',
+  '/images/imgProcess/1.2.JPG',
+  '/images/imgProcess/1.3.png',
+  '/images/imgProcess/1.4.jpg',
+  '/images/imgProcess/1.5.PNG',
 ]
 
 const photosB = [
-  '/images/imageProduitGris - Copie.png',
-  '/images/IMG_8079.JPEG',
-  '/images/imageProduitGris.png',
-  '/images/imageProduitBleue.png',
-  '/images/imagePalge.png',
+  '/images/imgProcess/2.1.JPG',
+  '/images/imgProcess/2.2.PNG',
+  '/images/imgProcess/2.3.PNG',
+  '/images/imgProcess/2.4.PNG',
+  '/images/imgProcess/2.5.jpg',
 ]
 </script>
 
@@ -45,11 +45,10 @@ const photosB = [
     <div class="process-text">
       <p class="process-tag">La sérigraphie</p>
       <h2 class="process-quote">
-        Pour la hargne<br>on a tout arraché.
+        De la hargne et du temps
       </h2>
       <p class="process-body">
-        De la première encre posée à la main jusqu'au premier tee-shirt livré.
-        Pas de raccourcis. Chaque pièce porte ce travail.
+        Des tests, des échecs, trop de doutes, du temps perdu, trop d'incompréhensions, de la fatigue, des progrès. Bref, c'est de la hargne derrière chaque produit
       </p>
     </div>
 
@@ -82,8 +81,8 @@ const photosB = [
 ════════════════════════════════ */
 .origine {
   display: grid;
-  grid-template-columns: 1fr 1.4fr 1fr;
-  grid-template-rows: 180px 1fr 180px;
+  grid-template-columns: 0.7fr 1.1fr 0.7fr;
+  grid-template-rows: 200px 0fr 200px;
   grid-template-areas:
     "col-left  strip-a  col-right"
     "col-left  text     col-right"
@@ -158,7 +157,6 @@ const photosB = [
 .strip {
   display: flex;
   flex-direction: row;
-  overflow: hidden;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
 }
@@ -167,7 +165,6 @@ const photosB = [
 
 .strip-item {
   flex: 1;
-  overflow: hidden;
   border-right: 1px solid rgba(255,255,255,0.05);
 }
 .strip-item:last-child { border-right: none; }
@@ -215,7 +212,7 @@ const photosB = [
 }
 
 .process-body {
-  font-family: var(--font-body);
+  font-family: 'Roboto';
   font-size: 0.83rem;
   line-height: 1.75;
   color: rgba(255,255,255,0.4);

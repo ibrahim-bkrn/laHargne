@@ -39,6 +39,13 @@ function scrollToCollection() {
         class="hero-img"
         aria-hidden="true"
       />
+      <!-- Image rognée pour mobile uniquement -->
+      <img
+        src="/images/imageProduitNoir-responsive.png"
+        alt=""
+        class="hero-img hero-img-mobile"
+        aria-hidden="true"
+      />
     </div>
 
     <!-- Overlay dégradé pour lisibilité du texte -->
@@ -114,6 +121,11 @@ function scrollToCollection() {
   height: 100%;
   object-fit: cover;
   object-position: center top;
+}
+
+/* Image rognée mobile — cachée sur desktop */
+.hero-img-mobile {
+  display: none;
 }
 
 /* Photo de droite (gris) — angle plus large, on remonte le sujet */
@@ -292,13 +304,18 @@ function scrollToCollection() {
 
 /* ---- Responsive ---- */
 @media (max-width: 768px) {
+  .hero {
+    height: 70vh;
+    min-height: 480px;
+  }
+
   .hero-title {
     font-size: clamp(3rem, 14vw, 5.5rem);
   }
 
   .hero-cta {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 18px;
   }
 
@@ -307,16 +324,19 @@ function scrollToCollection() {
     grid-template-columns: 1fr;
   }
 
-  /* Cache la bleue (1ère) et la grise (3ème) */
-  .hero-img:first-child,
-  .hero-img:last-child {
+  /* Cache la bleue (1ère), la noire originale (2ème) et la grise (3ème) */
+  .hero-img:nth-child(1),
+  .hero-img:nth-child(2),
+  .hero-img:nth-child(3) {
     display: none;
   }
 
-  /* La noire (2ème) prend toute la place, recadrée sur le haut du sujet */
-  .hero-img:nth-child(2) {
+  /* Image rognée mobile — visible seulement sur mobile */
+  .hero-img-mobile {
+    display: block;
     object-fit: cover;
     object-position: center top;
   }
+
 }
 </style>

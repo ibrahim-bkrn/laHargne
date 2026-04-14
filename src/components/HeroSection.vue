@@ -53,7 +53,7 @@ function scrollToCollection() {
 
       <!-- Boutons d'action -->
       <div class="hero-cta">
-        <button class="btn-primary" @click="scrollToCollection">
+        <button class="btn-primary" style="opacity: 0.7;" @click="scrollToCollection">
           Voir la Collection
         </button>
 
@@ -300,6 +300,23 @@ function scrollToCollection() {
     flex-direction: column;
     align-items: flex-start;
     gap: 18px;
+  }
+
+  /* Sur mobile : une seule image, la noire */
+  .hero-bg {
+    grid-template-columns: 1fr;
+  }
+
+  /* Cache la bleue (1ère) et la grise (3ème) */
+  .hero-img:first-child,
+  .hero-img:last-child {
+    display: none;
+  }
+
+  /* La noire (2ème) prend toute la place, recadrée sur le haut du sujet */
+  .hero-img:nth-child(2) {
+    object-fit: cover;
+    object-position: center top;
   }
 }
 </style>

@@ -56,7 +56,7 @@ function closeProduct() {
     <main>
       <HeroSection :instagram-url="INSTAGRAM_URL" />
       <MarqueeTicker />
-      <ManifestoSection />
+      <!-- <ManifestoSection /> -->
       <OrigineSection />
       <CounterSection />
       <CollectionSection

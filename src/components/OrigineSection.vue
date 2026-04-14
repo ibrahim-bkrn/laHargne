@@ -1,4 +1,6 @@
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+
 const imageDebut = '/images/imgProcess/aout2025.PNG'
 const imageFin   = '/images/imgProcess/avril2026.JPG'
 
@@ -17,6 +19,48 @@ const photosB = [
   '/images/imgProcess/2.4.PNG',
   '/images/imgProcess/2.5.jpg',
 ]
+
+// Chaque ligne apparaît une par une dans la colonne centrale
+const textLines = [
+  'La sérigraphie',
+  '—',
+  'De la hargne',
+  'et du temps.',
+  '',
+  'Des tests,',
+  'des échecs,',
+  'trop de doutes,',
+  'du temps perdu,',
+  'de la fatigue,',
+  'des progrès.',
+  '',
+  "C'est de la hargne",
+  'derrière chaque',
+  'produit.',
+]
+
+// État d'animation
+const isVisible = ref(false)
+const textRef = ref(null)
+
+let observer = null
+
+onMounted(() => {
+  observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        isVisible.value = true
+        observer.disconnect()
+      }
+    },
+    { threshold: 0.08 }
+  )
+  if (textRef.value) observer.observe(textRef.value)
+})
+
+onUnmounted(() => {
+  if (observer) observer.disconnect()
+})
 </script>
 
 <template>
@@ -41,15 +85,17 @@ const photosB = [
       </div>
     </div>
 
-    <!-- Texte central -->
-    <div class="process-text">
-      <p class="process-tag">La sérigraphie</p>
-      <h2 class="process-quote">
-        De la hargne et du temps
-      </h2>
-      <p class="process-body">
-        Des tests, des échecs, trop de doutes, du temps perdu, trop d'incompréhensions, de la fatigue, des progrès. Bref, c'est de la hargne derrière chaque produit
-      </p>
+    <!-- Texte central — colonne du milieu entre les deux strips -->
+    <div class="process-text" ref="textRef">
+      <div class="text-lines">
+        <span
+          v-for="(line, i) in textLines"
+          :key="i"
+          class="text-line"
+          :class="{ 'line-in': isVisible, 'line-empty': line === '' }"
+          :style="{ '--li': i }"
+        >{{ line }}</span>
+      </div>
     </div>
 
     <!-- Grande image droite — Avril 2026 -->
@@ -180,7 +226,7 @@ const photosB = [
 }
 .strip-item:hover img { filter: grayscale(0%); }
 
-/* ── Texte central ── */
+/* ── Texte central (desktop) ── */
 .process-text {
   display: flex;
   flex-direction: column;
@@ -192,85 +238,92 @@ const photosB = [
   border-right: 1px solid var(--color-border);
 }
 
-.process-tag {
+.text-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Chaque ligne — part du bas, invisible */
+.text-line {
+  display: block;
   font-family: var(--font-body);
-  font-size: 0.72rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
-  margin-bottom: 20px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition-delay: calc(var(--li) * 0.07s);
 }
 
-.process-quote {
-  font-family: var(--font-title);
-  font-size: clamp(1.8rem, 3.2vw, 3rem);
-  letter-spacing: 0.05em;
+.text-line.line-empty { height: 0.5em; }
+
+.text-line:first-child {
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-text);
-  line-height: 1.05;
-  margin-bottom: 20px;
+  color: rgba(255,255,255,0.2);
 }
 
-.process-body {
-  font-family: 'Roboto';
-  font-size: 0.83rem;
-  line-height: 1.75;
-  color: rgba(255,255,255,0.4);
-  max-width: 260px;
+.text-line:nth-child(2) {
+  color: rgba(255,255,255,0.12);
+}
+
+/* Déclenche : monte en position + apparaît */
+.text-line.line-in {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ════════════════════════════════
-   MOBILE — images pleine largeur, strips entre les deux
+   MOBILE — 3 colonnes : strip-a | texte | strip-b
 ════════════════════════════════ */
 @media (max-width: 768px) {
   .origine {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 148px;
-    grid-template-rows: auto auto auto auto;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
     grid-template-areas:
-      "col-left   col-left"
-      "strip-a    strip-b"
-      "col-right  col-right"
-      "text       text";
+      "col-left  col-left  col-left"
+      "strip-a   text      strip-b"
+      "col-right col-right col-right";
     min-height: auto;
   }
 
-  /* Images pleine largeur, hauteur naturelle */
+  /* Images pleine largeur */
   .col-left,
   .col-right {
-    width: 100%;
-    border: none;
+    border-left: none;
+    border-right: none;
     border-bottom: 1px solid var(--color-border);
   }
-
-  .image-wrap {
-    height: auto;
+  .col-right {
+    border-top: 1px solid var(--color-border);
   }
+
+  .image-wrap { height: 260px; }
 
   .main-img {
-    height: auto;
-    object-fit: unset;
+    height: 100%;
+    object-fit: cover;
   }
 
-  /* Strips : colonnes verticales côte à côte entre les deux images */
+  /* Strips : colonnes verticales de photos */
   .strip {
     flex-direction: column;
-    border-top: none;
-    border-bottom: none;
+    border: none;
     height: 100%;
-    min-height: 320px;
+    min-height: 400px;
   }
 
   .strip-a {
-    border-right: none;
-    border-bottom: none;
-    padding-right: 8px;
+    border-right: 1px solid var(--color-border);
   }
 
   .strip-b {
-    border-left: none;
-    padding-left: 8px;
+    border-left: 1px solid var(--color-border);
   }
 
   .strip-item {
@@ -287,16 +340,37 @@ const photosB = [
     object-position: center top;
   }
 
-  /* Texte en bas, secondaire */
+  /* Texte — colonne centrale entre les deux strips */
   .process-text {
     border-left: none;
     border-right: none;
-    border-top: 1px solid var(--color-border);
-    padding: 32px 20px;
+    padding: 8px 4px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
-  .date-label {
-    padding: 14px 16px;
+  .text-lines {
+    padding: 12px 4px;
+    gap: 6px;
+    align-items: flex-start;
+    width: 100%;
   }
+
+  .text-line {
+    font-size: clamp(1rem, 4.5vw, 1.3rem);
+    line-height: 1.4;
+    white-space: normal;
+    word-break: break-word;
+    color: rgba(255, 255, 255, 0.75);
+    /* Reset transform pour mobile — vient du bas */
+    transform: translateY(24px);
+  }
+
+  .text-line:first-child {
+    font-size: clamp(0.65rem, 2.5vw, 0.8rem);
+  }
+
+  .date-label { padding: 14px 16px; }
 }
 </style>

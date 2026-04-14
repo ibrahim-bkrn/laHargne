@@ -37,7 +37,7 @@ const photosB = [
       </div>
       <div class="date-label">
         <span class="date-tag">Août 2025</span>
-        <p class="date-desc">Le début. Tout à construire.</p>
+        <p class="date-desc">Le début.. Tout à construire.</p>
       </div>
     </div>
 

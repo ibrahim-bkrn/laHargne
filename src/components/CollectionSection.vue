@@ -18,26 +18,23 @@ const emit = defineEmits(['open-product'])
 const product = {
   id: 1,
   name: 'TEE-SHIRT LAHARGNE',
-  price: '39 €',
+  price: '15.90 €',
   description: "L'essentiel. Un seul modèle. Six façons de l'habiter.",
-  longDescription:
-    "Le tee-shirt qui a tout lancé. Coupe oversize, grammage lourd, broderie LAHARGNE dans le dos. Pas de fioriture, pas d'excès. Juste la hargne — dans la couleur que tu choisis.",
-  details: [
-    '100% coton heavyweight 280g/m²',
-    'Coupe oversize déstructurée',
-    'Broderie dos — logo LAHARGNE',
-    'Col rond renforcé',
+    details: [
+    '100% coton biologique 185g/m²',
+    'Coupe oversize ',
+    'Impression sérigraphie — logo LAHARGNE',
     'Fabriqué au Portugal',
   ],
   sizes: ['S', 'M', 'L', 'XL', 'XXL'],
   // ✏️ COLORIS — ajoutez l'image de chaque coloris quand vous l'avez
   variants: [
-    { id: 'blanc',    label: 'Blanc',          hex: '#E8E8E8', image: '',                              mockupColor: '#e8e8e8', mockupTextColor: '#111111', mockupBg: 'linear-gradient(145deg,#1e1e1e,#111)'    },
+    { id: 'blanc',    label: 'Gris foncé',     hex: '#4A4A4A', image: '',                              mockupColor: '#4A4A4A', mockupTextColor: '#111111', mockupBg: 'linear-gradient(145deg,#1e1e1e,#111)'    },
     { id: 'noir',     label: 'Noir',           hex: '#1C1C1C', image: '/images/imageProduitNoir.png',  mockupColor: '#242424', mockupTextColor: '#ffffff',  mockupBg: 'linear-gradient(145deg,#2a2a2a,#111)'   },
-    { id: 'gris',     label: 'Gris',           hex: '#4A4A4A', image: '/images/imageProduitGris.png',  mockupColor: '#4a4a4a', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#222,#111)'      },
-    { id: 'bleu',     label: 'Bleu',           hex: '#2D4B7A', image: '/images/imageProduitBleue.png', mockupColor: '#2d4b7a', mockupTextColor: '#ddeeff',  mockupBg: 'linear-gradient(145deg,#0e1824,#0d0d0d)'},
-    { id: 'kaki',     label: 'Kaki',           hex: '#5C6B4A', image: '',                              mockupColor: '#5c6b4a', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#181e12,#0d0d0d)'},
-    { id: 'bordeaux', label: 'Bordeaux',       hex: '#6B2737', image: '',                              mockupColor: '#6b2737', mockupTextColor: '#f5e8e8',  mockupBg: 'linear-gradient(145deg,#1e1014,#0d0d0d)'},
+    { id: 'gris',     label: 'Gris',           hex: '#CCCCCC', image: '/images/imageProduitGris.png',  mockupColor: '#CCCCCC', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#222,#111)'      },
+    { id: 'bleu',     label: 'Bleu Marine',    hex: '#2D4B7A', image: '/images/imageProduitBleue.png', mockupColor: '#2d4b7a', mockupTextColor: '#ddeeff',  mockupBg: 'linear-gradient(145deg,#0e1824,#0d0d0d)'},
+    { id: 'kaki',     label: 'Vert clair',     hex: '#C5C7B5', image: '',                              mockupColor: '#C5C7B5', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#181e12,#0d0d0d)'},
+    { id: 'Rose',     label: 'rose',           hex: '#EFBCB9', image: '/images/imagePalge.png',                              mockupColor: '#EFBCB9', mockupTextColor: '#f5e8e8',  mockupBg: 'linear-gradient(145deg,#1e1014,#0d0d0d)'},
   ],
 }
 
@@ -59,12 +56,33 @@ function openProductPage() {
 
       <!-- En-tête -->
       <header class="collection-header" v-scroll-reveal>
-        <h2 class="section-title">Collection</h2>
-        <span class="collection-tag">Tee-shirts — 2025</span>
+        <h2 class="section-title">Première Collection</h2>
+        <!--<span class="collection-tag">Tee-shirts — 2025</span>-->
       </header>
 
       <!-- Feature produit : image gauche + info droite -->
       <div class="product-feature">
+
+        <!-- ===== SÉLECTEUR COLORIS (au-dessus de l'image sur mobile) ===== -->
+        <div class="variant-selector variant-selector-top">
+          <div class="selector-label">
+            Coloris
+            <span class="selector-current">— {{ selectedVariant.label }}</span>
+          </div>
+          <div class="swatches-row">
+            <button
+              v-for="v in product.variants"
+              :key="v.id"
+              class="swatch-btn"
+              :class="{ active: selectedVariant.id === v.id }"
+              :style="{ '--c': v.hex }"
+              :title="v.label"
+              :aria-label="v.label"
+              :aria-pressed="selectedVariant.id === v.id"
+              @click="selectedVariant = v"
+            ></button>
+          </div>
+        </div>
 
         <!-- ===== VISUEL ===== -->
         <div class="feature-visual" v-scroll-reveal>
@@ -218,14 +236,15 @@ function openProductPage() {
 
 .feature-img {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  height: 85vh;
   object-fit: cover;
+  object-position: center center;
   border-radius: var(--border-radius);
 }
 
 .feature-mockup {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 2 / 3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -302,6 +321,11 @@ function openProductPage() {
 .feature-divider {
   height: 1px;
   background-color: var(--color-border);
+}
+
+/* Sélecteur du haut — caché sur desktop, visible sur mobile */
+.variant-selector-top {
+  display: none !important;
 }
 
 /* ---- Sélecteur coloris ---- */
@@ -391,7 +415,17 @@ function openProductPage() {
 @media (max-width: 900px) {
   .product-feature {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 32px;
+  }
+
+  /* Affiche le sélecteur au-dessus de l'image */
+  .variant-selector-top {
+    display: flex !important;
+  }
+
+  /* Cache celui dans feature-info */
+  .feature-info .variant-selector {
+    display: none;
   }
 
   .feature-mockup,

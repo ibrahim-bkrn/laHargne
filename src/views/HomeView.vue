@@ -58,7 +58,7 @@ function closeProduct() {
       <MarqueeTicker />
       <!-- <ManifestoSection /> -->
       <OrigineSection />
-      <CounterSection />
+      <!--<CounterSection />-->
       <CollectionSection
         :whatsapp-url="WHATSAPP_URL"
         @open-product="openProduct"

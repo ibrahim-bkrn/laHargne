@@ -1,13 +1,4 @@
 <script setup>
-/**
- * LookbookSection.vue — Grille photos de la marque
- *
- * ✏️ Pour ajouter vos vraies photos :
- *    - Placez vos images dans public/images/ à la racine du projet
- *    - Remplacez src: '' par ex: '/images/lookbook-1.jpg'
- *    - Ajustez wide: true sur les cases que vous voulez en 2 colonnes
- */
-
 defineProps({
   instagramUrl: {
     type: String,
@@ -15,37 +6,11 @@ defineProps({
   },
 })
 
-// ✏️ LOOKBOOK — 4 photos, remplacez les src par vos vraies images
-// Layout : [grande] [petite] / [petite] [grande]
-// → Remplacer par ex: '/images/lookbook-1.jpg'
-// Layout grille 3 col × 2 lignes :
-// [ large (2col)       ] [ ← haut-droite ]
-// [ ← bas-gauche ] [      large (2col)   ]
-const lookbookItems = [
-  {
-    id: 1,
-    src: 'https://picsum.photos/seed/lhargne-l1/900/700',
-    alt: 'Look LAHARGNE 01',
-    wide: true,   // haut-gauche, 2 colonnes
-  },
-  {
-    id: 2,
-    src: '/images/imagePalge.png',
-    alt: 'Look LAHARGNE 02',
-    wide: false,  // haut-droite
-  },
-  {
-    id: 3,
-    src: '/images/imageDecor.png',
-    alt: 'Look LAHARGNE 03',
-    wide: false,  // bas-gauche
-  },
-  {
-    id: 4,
-    src: 'https://picsum.photos/seed/boxing/900/700',
-    alt: 'Look LAHARGNE 04',
-    wide: true,   // bas-droite, 2 colonnes
-  },
+// ✏️ 3 images côte à côte format portrait
+const photos = [
+  { src: '/images/profilInsta.png',   alt: 'LAHARGNE — Profil Instagram' },
+  { src: '/images/IMG_8079.JPEG',    alt: 'LAHARGNE — Look 02' },
+  { src: '/images/imageDecor.png',    alt: 'LAHARGNE — Look 03' },
 ]
 </script>
 
@@ -58,44 +23,26 @@ const lookbookItems = [
         <h2 class="section-title">Lookbook</h2>
       </header>
 
-      <!-- Grille asymétrique -->
+      <!-- 3 images portrait côte à côte -->
       <div class="lookbook-grid">
         <div
-          v-for="(item, index) in lookbookItems"
-          :key="item.id"
+          v-for="(photo, i) in photos"
+          :key="i"
           class="lookbook-item"
-          :class="{ wide: item.wide }"
-          v-scroll-reveal="index * 70"
+          v-scroll-reveal="i * 80"
         >
-          <!--
-            Photo lookbook — remplacez src="" par votre chemin d'image.
-            La classe has-image permet d'afficher l'image réelle.
-          -->
-          <img
-            v-if="item.src"
-            :src="item.src"
-            :alt="item.alt"
-            class="lookbook-img"
-          />
-
-          <!-- Placeholder visible si pas d'image réelle -->
-          <div class="lookbook-placeholder" aria-hidden="true">
-            <!-- Numéro de la photo pour s'y retrouver en développement -->
-            <span class="lookbook-placeholder-num">0{{ item.id }}</span>
-            <span class="lookbook-placeholder-label">Photo à venir</span>
-          </div>
+          <img :src="photo.src" :alt="photo.alt" class="lookbook-img" />
         </div>
       </div>
 
       <!-- CTA Instagram -->
-      <div class="lookbook-cta" v-scroll-reveal="150">
+      <div class="lookbook-cta" v-scroll-reveal="200">
         <a
           :href="instagramUrl"
           target="_blank"
           rel="noopener noreferrer"
           class="btn-outline"
         >
-          <!-- Icône Instagram inline -->
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -119,7 +66,6 @@ const lookbookItems = [
 </template>
 
 <style scoped>
-/* ---- Section ---- */
 .lookbook {
   padding: var(--spacing-section) 0;
   background-color: var(--color-surface);
@@ -127,87 +73,38 @@ const lookbookItems = [
   border-bottom: 1px solid var(--color-border);
 }
 
-/* ---- En-tête ---- */
 .lookbook-header {
   margin-bottom: 52px;
 }
 
-/* ---- Grille ---- */
-/* Layout 4 images : [grande 2col] [petite] / [petite] [grande 2col] */
+/* ---- Grille 3 colonnes portrait ---- */
 .lookbook-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 360px 360px;
-  gap: 10px;
-}
-
-/* Les items "wide" s'étendent sur 2 colonnes */
-.lookbook-item.wide {
-  grid-column: span 2;
+  gap: 12px;
 }
 
 .lookbook-item {
-  position: relative;
   overflow: hidden;
-  background-color: #141414;
   border-radius: var(--border-radius);
-  cursor: pointer;
-}
-
-/* Zoom subtil au hover */
-.lookbook-item:hover .lookbook-img {
-  transform: scale(1.06);
-  filter: brightness(0.8);
+  background: #141414;
 }
 
 .lookbook-img {
   width: 100%;
-  height: 100%;
-  /* cover pour les photos ambiance, contain pour les visuels produit */
+  aspect-ratio: 9 / 16;
   object-fit: cover;
-  object-position: center;
+  object-position: center top;
   display: block;
-  transition:
-    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.55s ease;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), filter 0.55s ease;
 }
 
-
-/* ---- Placeholder ---- */
-.lookbook-placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-end;
-  padding: 18px 20px;
-  pointer-events: none;
+.lookbook-item:hover .lookbook-img {
+  transform: scale(1.05);
+  filter: brightness(0.8);
 }
 
-/* Masque le placeholder si une vraie image est présente */
-.lookbook-item:has(.lookbook-img) .lookbook-placeholder {
-  display: none;
-}
-
-.lookbook-placeholder-num {
-  font-family: var(--font-title);
-  font-size: 2rem;
-  letter-spacing: 0.05em;
-  color: var(--color-border);
-  line-height: 1;
-}
-
-.lookbook-placeholder-label {
-  font-family: var(--font-body);
-  font-size: 0.68rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #333;
-  margin-top: 4px;
-}
-
-/* ---- CTA bas de section ---- */
+/* ---- CTA ---- */
 .lookbook-cta {
   margin-top: 52px;
   display: flex;
@@ -223,24 +120,18 @@ const lookbookItems = [
 /* ---- Responsive ---- */
 @media (max-width: 768px) {
   .lookbook-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(4, 240px);
-  }
-
-  /* Sur tablette, les wide prennent toute la largeur */
-  .lookbook-item.wide {
-    grid-column: span 2;
+    gap: 8px;
   }
 }
 
 @media (max-width: 480px) {
   .lookbook-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(4, 260px);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
   }
 
-  .lookbook-item.wide {
-    grid-column: span 1;
+  .lookbook-img {
+    aspect-ratio: 3 / 5;
   }
 }
 </style>

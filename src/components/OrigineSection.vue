@@ -75,12 +75,14 @@ onUnmounted(() => {
 
     <!-- Grande image gauche — Août 2025 -->
     <div class="col-left">
+      <div class="date-top">
+        <span class="date-tag">Août 2025</span>
+      </div>
       <div class="image-wrap">
         <img :src="imageDebut" alt="Les débuts — Août 2025" class="main-img" />
         <div class="image-overlay"></div>
       </div>
-      <div class="date-label">
-        <span class="date-tag">Août 2025</span>
+      <div class="date-bottom">
         <p class="date-desc">Le début.. Tout à construire.</p>
       </div>
     </div>
@@ -100,13 +102,15 @@ onUnmounted(() => {
 
     <!-- Grande image droite — Avril 2026 -->
     <div class="col-right">
+      <div class="date-top">
+        <span class="date-tag">Avril 2026</span>
+      </div>
       <div class="image-wrap">
         <img :src="imageFin" alt="Aujourd'hui — Avril 2026" class="main-img" />
         <div class="image-overlay"></div>
       </div>
-      <div class="date-label">
-        <span class="date-tag">Avril 2026</span>
-        <p class="date-desc">Le produit. Livré.</p>
+      <div class="date-bottom">
+        <p class="date-desc">Le produit. Prêt.</p>
       </div>
     </div>
 
@@ -176,27 +180,34 @@ onUnmounted(() => {
   background: linear-gradient(to bottom, transparent 50%, rgba(5,5,5,0.85) 100%);
 }
 
-.date-label {
-  padding: 20px 20px;
-  border-top: 1px solid var(--color-border);
+.date-top {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .date-tag {
   display: block;
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  letter-spacing: 0.25em;
+  font-family: var(--font-title);
+  font-size: clamp(2.6rem, 2.5vw, 2.4rem);
+  letter-spacing: 0.06em;
+  text-align: center;
+  padding-top: 30px;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
-  margin-bottom: 6px;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+.date-bottom {
+  padding: 16px 20px;
+  border-top: 1px solid var(--color-border);
 }
 
 .date-desc {
-  font-family: var(--font-title);
-  font-size: 1rem;
-  letter-spacing: 0.08em;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--color-text);
+  color: rgba(255,255,255,0.4);
 }
 
 /* ── Strips (desktop = lignes horizontales) ── */

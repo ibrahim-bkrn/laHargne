@@ -305,7 +305,7 @@ function scrollToCollection() {
 /* ---- Responsive ---- */
 @media (max-width: 768px) {
   .hero {
-    height: 70vh;
+    height: 100vh;
     min-height: 480px;
   }
 

@@ -15,8 +15,11 @@ defineProps({
   },
 })
 
-// ✏️ Image de fond du Hero
-const heroImage = 'https://picsum.photos/seed/boxing/1920/1080'
+const heroImages = [
+  '/images/imageProduitNoir.png',
+  '/images/imageProduitBleue.png',
+  '/images/imageProduitGris.png',
+]
 
 function scrollToCollection() {
   const el = document.getElementById('collection')
@@ -28,13 +31,10 @@ function scrollToCollection() {
   <section class="hero" id="hero">
     <!-- ---- Fond ---- -->
     <div class="hero-bg">
-      <!--
-        Image de fond : remplacez src="" par votre chemin d'image.
-        Tant que src est vide, le dégradé CSS du parent s'affiche.
-      -->
       <img
-        v-if="heroImage"
-        :src="heroImage"
+        v-for="(img, i) in heroImages"
+        :key="i"
+        :src="img"
         alt=""
         class="hero-img"
         aria-hidden="true"
@@ -118,9 +118,9 @@ function scrollToCollection() {
 .hero-bg {
   position: absolute;
   inset: 0;
-  /* Dégradé de fallback affiché quand heroImage est vide */
-  background:
-    linear-gradient(140deg, #0d0d0d 0%, #181818 35%, #121212 65%, #0d0d0d 100%);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #0d0d0d;
 }
 
 .hero-img {
@@ -128,6 +128,16 @@ function scrollToCollection() {
   height: 100%;
   object-fit: cover;
   object-position: center top;
+}
+
+/* Photo de droite (gris) — angle plus large, on remonte le sujet */
+.hero-img:last-child {
+  object-position: center 15%;
+}
+
+/* Séparateurs subtils entre les panneaux */
+.hero-img:not(:last-child) {
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* Overlay principal — assombrit la photo sans l'écraser */

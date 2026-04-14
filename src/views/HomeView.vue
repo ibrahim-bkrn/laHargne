@@ -18,6 +18,7 @@ import AppNav from '../components/AppNav.vue'
 import HeroSection from '../components/HeroSection.vue'
 import MarqueeTicker from '../components/MarqueeTicker.vue'
 import ManifestoSection from '../components/ManifestoSection.vue'
+import OrigineSection from '../components/OrigineSection.vue'
 import CounterSection from '../components/CounterSection.vue'
 import CollectionSection from '../components/CollectionSection.vue'
 import LookbookSection from '../components/LookbookSection.vue'
@@ -56,6 +57,7 @@ function closeProduct() {
       <HeroSection :instagram-url="INSTAGRAM_URL" />
       <MarqueeTicker />
       <ManifestoSection />
+      <OrigineSection />
       <CounterSection />
       <CollectionSection
         :whatsapp-url="WHATSAPP_URL"

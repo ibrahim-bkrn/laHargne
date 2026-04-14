@@ -16,9 +16,9 @@ defineProps({
 })
 
 const heroImages = [
-  '/images/imageProduitNoir.png',
   '/images/imageProduitBleue.png',
-  '/images/imageProduitGris.png',
+  '/images/imageProduitNoir.png',
+  '/images/imageProduitGris - Copie.png',
 ]
 
 function scrollToCollection() {
@@ -46,37 +46,23 @@ function scrollToCollection() {
 
     <!-- ---- Contenu principal ---- -->
     <div class="hero-content">
-      <!-- Sous-titre petit (eyebrow) -->
-      <p class="hero-eyebrow">Tee-shirts — Collection 2025</p>
-
-      <!-- Titre principal géant -->
-      <!-- ✏️ Modifiez ce texte pour changer le message principal -->
-      <!--
-        Chaque ligne est dans un wrapper overflow:hidden.
-        Le texte arrive par le bas (effet "masque de révélation").
-        C'est plus percutant qu'un simple fade.
-      -->
-      <h1 class="hero-title" aria-label="La Hargne C'est un État d'esprit">
-        <span class="line-wrap"><span class="line" style="--delay:0.3s">La Hargne</span></span>
-        <span class="line-wrap"><span class="line" style="--delay:0.48s">C'est un</span></span>
-        <span class="line-wrap accent-wrap"><span class="line accent" style="--delay:0.66s">État d'esprit</span></span>
+      <h1 class="hero-title" aria-label="Arracher la place qu'on nous donnerai jamais.">
+        <span class="word-main">Arracher</span>
+        <span class="word-sub">la place qu'on nous donnerai jamais.</span>
       </h1>
 
       <!-- Boutons d'action -->
       <div class="hero-cta">
-        <!-- Bouton principal → scroll vers la collection -->
         <button class="btn-primary" @click="scrollToCollection">
           Voir la Collection
         </button>
 
-        <!-- Lien Instagram avec icône SVG inline -->
         <a
           :href="instagramUrl"
           target="_blank"
           rel="noopener noreferrer"
           class="hero-instagram"
         >
-          <!-- Icône Instagram (SVG inline, pas de dépendance externe) -->
           <svg
             class="hero-instagram-icon"
             viewBox="0 0 24 24"
@@ -146,88 +132,61 @@ function scrollToCollection() {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(5, 5, 5, 0.48) 0%,
-    rgba(5, 5, 5, 0.20) 35%,
-    rgba(5, 5, 5, 0.42) 65%,
-    rgba(5, 5, 5, 0.82) 100%
+    rgba(5, 5, 5, 0.25) 0%,
+    rgba(5, 5, 5, 0.05) 35%,
+    rgba(5, 5, 5, 0.20) 65%,
+    rgba(5, 5, 5, 0.65) 100%
   );
 }
 
-/* Vignette latérale gauche — légère, côté texte uniquement */
-.hero-overlay::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    rgba(5, 5, 5, 0.28) 0%,
-    transparent 55%
-  );
-}
 
 /* ---- Contenu ---- */
 .hero-content {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: var(--max-width);
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   padding: 0 24px;
-  padding-top: 100px; /* Compense la hauteur de la nav sticky */
 }
 
-/* Petit label au-dessus du titre */
-.hero-eyebrow {
-  font-family: var(--font-body);
-  font-size: 0.78rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  /* Blanc avec opacité — visible sur toute photo */
-  color: rgba(255, 255, 255, 0.75);
-  margin-bottom: 28px;
-  animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
-}
-
-/* Titre géant */
+/* Titre centré */
 .hero-title {
   display: flex;
   flex-direction: column;
+  align-items: center;
   font-family: var(--font-title);
-  font-size: clamp(3.8rem, 10.5vw, 9rem);
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-  line-height: 0.93;
-  color: var(--color-text);
-  margin-bottom: 52px;
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+  margin-bottom: 48px;
+  animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+  gap: 0.1em;
 }
 
-/* Wrapper overflow:hidden — masque le texte qui arrive par le bas */
-.line-wrap {
+.word-main {
   display: block;
-  overflow: hidden;
-  /* Légère marge négative pour que les lignes se touchent bien */
-  margin-bottom: -0.05em;
+  font-size: clamp(5rem, 16vw, 15rem);
+  color: #fff;
 }
 
-/* Chaque ligne démarre hors du wrapper (en-dessous) */
-.hero-title .line {
+.word-sub {
   display: block;
-  transform: translateY(110%);
-  animation: line-reveal 1s cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0s) both;
-}
-
-/* La dernière ligne en blanc pur (accent) */
-.hero-title .accent {
-  color: var(--color-accent);
+  font-size: clamp(1.3rem, 3.2vw, 3rem);
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.05em;
 }
 
 /* Groupe de CTA */
 .hero-cta {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 28px;
   flex-wrap: wrap;
-  animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.85s both;
+  animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
 }
 
 /* Lien Instagram */

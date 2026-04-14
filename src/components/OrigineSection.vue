@@ -223,35 +223,57 @@ const photosB = [
 }
 
 /* ════════════════════════════════
-   MOBILE — strips en colonnes latérales
-   [strip-a] [col-left / text / col-right] [strip-b]
+   MOBILE — images pleine largeur, strips entre les deux
 ════════════════════════════════ */
 @media (max-width: 768px) {
   .origine {
-    grid-template-columns: 56px 1fr 56px;
-    grid-template-rows: auto auto auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 148px;
+    grid-template-rows: auto auto auto auto;
     grid-template-areas:
-      "strip-a  col-left   strip-b"
-      "strip-a  text       strip-b"
-      "strip-a  col-right  strip-b";
+      "col-left   col-left"
+      "strip-a    strip-b"
+      "col-right  col-right"
+      "text       text";
     min-height: auto;
   }
 
-  /* Strips deviennent des colonnes verticales */
+  /* Images pleine largeur, hauteur naturelle */
+  .col-left,
+  .col-right {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .image-wrap {
+    height: auto;
+  }
+
+  .main-img {
+    height: auto;
+    object-fit: unset;
+  }
+
+  /* Strips : colonnes verticales côte à côte entre les deux images */
   .strip {
     flex-direction: column;
     border-top: none;
     border-bottom: none;
     height: 100%;
+    min-height: 320px;
   }
 
   .strip-a {
-    border-right: 1px solid var(--color-border);
+    border-right: none;
     border-bottom: none;
+    padding-right: 8px;
   }
 
   .strip-b {
-    border-left: 1px solid var(--color-border);
+    border-left: none;
+    padding-left: 8px;
   }
 
   .strip-item {
@@ -261,27 +283,23 @@ const photosB = [
   }
   .strip-item:last-child { border-bottom: none; }
 
-  /* Images — format téléphone */
-  .col-left,
-  .col-right {
-    border-right: none;
-    border-left: none;
-    border-bottom: 1px solid var(--color-border);
-    height: 70vw;
-    max-height: 420px;
+  .strip-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
   }
-  .col-right { border-bottom: none; }
 
+  /* Texte en bas, secondaire */
   .process-text {
     border-left: none;
     border-right: none;
     border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-    padding: 36px 20px;
+    padding: 32px 20px;
   }
 
   .date-label {
-    padding: 16px;
+    padding: 14px 16px;
   }
 }
 </style>

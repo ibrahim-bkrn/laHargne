@@ -1,8 +1,55 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 const imageDebut = '/images/imgProcess/aout2025.PNG'
 const imageFin   = '/images/imgProcess/avril2026.JPG'
+
+const mobileLines = [
+  'La sérigraphie',
+  '—',
+  'De la hargne',
+  'et du temps.',
+  'Des tests,',
+  'des échecs,',
+  'trop de doutes,',
+  'du temps perdu,',
+  'de la fatigue,',
+  'des progrès.',
+  "C'est de la hargne",
+  'derrière chaque',
+  'produit.',
+]
+
+const linesVisible = reactive(Array(mobileLines.length).fill(false))
+const mobileTextRef = ref(null)
+const lineRefs = []
+let timeouts = []
+let containerObserver = null
+
+onMounted(() => {
+  if (!mobileTextRef.value) return
+
+  containerObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        containerObserver.disconnect()
+        mobileLines.forEach((_, i) => {
+          const t = setTimeout(() => {
+            linesVisible[i] = true
+          }, 400 + i * 550)
+          timeouts.push(t)
+        })
+      }
+    },
+    { threshold: 0.15 }
+  )
+  containerObserver.observe(mobileTextRef.value)
+})
+
+onUnmounted(() => {
+  timeouts.forEach(t => clearTimeout(t))
+  if (containerObserver) containerObserver.disconnect()
+})
 
 const photosA = [
   '/images/imgProcess/1.1.PNG',
@@ -19,48 +66,6 @@ const photosB = [
   '/images/imgProcess/2.4.PNG',
   '/images/imgProcess/2.5.jpg',
 ]
-
-// Chaque ligne apparaît une par une dans la colonne centrale
-const textLines = [
-  'La sérigraphie',
-  '—',
-  'De la hargne',
-  'et du temps.',
-  '',
-  'Des tests,',
-  'des échecs,',
-  'trop de doutes,',
-  'du temps perdu,',
-  'de la fatigue,',
-  'des progrès.',
-  '',
-  "C'est de la hargne",
-  'derrière chaque',
-  'produit.',
-]
-
-// État d'animation
-const isVisible = ref(false)
-const textRef = ref(null)
-
-let observer = null
-
-onMounted(() => {
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        isVisible.value = true
-        observer.disconnect()
-      }
-    },
-    { threshold: 0.08 }
-  )
-  if (textRef.value) observer.observe(textRef.value)
-})
-
-onUnmounted(() => {
-  if (observer) observer.disconnect()
-})
 </script>
 
 <template>
@@ -87,17 +92,28 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Texte central — colonne du milieu entre les deux strips -->
-    <div class="process-text" ref="textRef">
-      <div class="text-lines">
-        <span
-          v-for="(line, i) in textLines"
-          :key="i"
-          class="text-line"
-          :class="{ 'line-in': isVisible, 'line-empty': line === '' }"
-          :style="{ '--li': i }"
-        >{{ line }}</span>
-      </div>
+    <!-- Texte central desktop -->
+    <div class="process-text">
+      <p class="process-tag">La sérigraphie</p>
+      <h2 class="process-quote">
+        De la hargne<br>et du temps.
+      </h2>
+      <p class="process-body">
+        Des tests, des échecs, trop de doutes, du temps perdu,
+        de la fatigue, des progrès.<br>
+        C'est de la hargne derrière chaque produit.
+      </p>
+    </div>
+
+    <!-- Texte central mobile — lignes animées au scroll -->
+    <div class="mobile-text" ref="mobileTextRef">
+      <span
+        v-for="(line, i) in mobileLines"
+        :key="i"
+        :ref="el => { if (el) lineRefs[i] = el }"
+        class="mobile-line"
+        :class="{ 'line-in': linesVisible[i] }"
+      >{{ line }}</span>
     </div>
 
     <!-- Grande image droite — Avril 2026 -->
@@ -110,7 +126,7 @@ onUnmounted(() => {
         <div class="image-overlay"></div>
       </div>
       <div class="date-bottom">
-        <p class="date-desc">Le produit. Prêt.</p>
+        <p class="date-desc">Le produit. Prêt .</p>
       </div>
     </div>
 
@@ -145,6 +161,7 @@ onUnmounted(() => {
 .strip-a      { grid-area: strip-a; }
 .col-left     { grid-area: col-left; }
 .process-text { grid-area: text; }
+.mobile-text  { grid-area: text; display: none; }
 .col-right    { grid-area: col-right; }
 .strip-b      { grid-area: strip-b; }
 
@@ -249,43 +266,31 @@ onUnmounted(() => {
   border-right: 1px solid var(--color-border);
 }
 
-.text-lines {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+.process-tag {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 24px;
 }
 
-/* Chaque ligne — part du bas, invisible */
-.text-line {
-  display: block;
+.process-quote {
+  font-family: var(--font-title);
+  font-size: clamp(1.8rem, 3.5vw, 3.2rem);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  line-height: 1.05;
+  margin-bottom: 24px;
+}
+
+.process-body {
   font-family: var(--font-body);
   font-size: 0.85rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.5);
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  transition-delay: calc(var(--li) * 0.07s);
-}
-
-.text-line.line-empty { height: 0.5em; }
-
-.text-line:first-child {
-  font-size: 0.65rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.2);
-}
-
-.text-line:nth-child(2) {
-  color: rgba(255,255,255,0.12);
-}
-
-/* Déclenche : monte en position + apparaît */
-.text-line.line-in {
-  opacity: 1;
-  transform: translateY(0);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.45);
+  max-width: 280px;
 }
 
 /* ════════════════════════════════
@@ -351,35 +356,50 @@ onUnmounted(() => {
     object-position: center top;
   }
 
-  /* Texte — colonne centrale entre les deux strips */
+  /* Texte desktop — caché sur mobile */
   .process-text {
-    border-left: none;
-    border-right: none;
-    padding: 8px 4px;
+    display: none;
+  }
+
+  /* Texte mobile animé */
+  .mobile-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  .text-lines {
+    text-align: center;
     padding: 12px 4px;
-    gap: 6px;
-    align-items: flex-start;
-    width: 100%;
+    height: 100%;
   }
 
-  .text-line {
-    font-size: clamp(1rem, 4.5vw, 1.3rem);
-    line-height: 1.4;
-    white-space: normal;
-    word-break: break-word;
-    color: rgba(255, 255, 255, 0.75);
-    /* Reset transform pour mobile — vient du bas */
-    transform: translateY(24px);
+  .mobile-line {
+    display: block;
+    font-family: var(--font-title);
+    font-size: clamp(1.1rem, 5.5vw, 1.6rem);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    line-height: 1;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.35s ease-out, transform 0.35s ease-out;
   }
 
-  .text-line:first-child {
-    font-size: clamp(0.65rem, 2.5vw, 0.8rem);
+  .mobile-line:first-child {
+    font-family: var(--font-body);
+    font-size: clamp(0.6rem, 2.2vw, 0.75rem);
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .mobile-line:nth-child(2) {
+    color: rgba(255,255,255,0.15);
+    font-size: clamp(0.9rem, 4vw, 1.2rem);
+  }
+
+  .mobile-line.line-in {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .date-label { padding: 14px 16px; }

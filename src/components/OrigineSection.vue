@@ -1,54 +1,45 @@
 <script setup>
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { reactive, onMounted, onUnmounted } from 'vue'
 
 const imageDebut = '/images/imgProcess/aout2025.PNG'
 const imageFin   = '/images/imgProcess/avril2026.JPG'
 
 const mobileLines = [
   'La sérigraphie',
-  '—',
-  'De la hargne',
-  'et du temps.',
+  'De la hargne,',
+  'du temps.',
   'Des tests,',
   'des échecs,',
   'trop de doutes,',
-  'du temps perdu,',
   'de la fatigue,',
-  'des progrès.',
-  "C'est de la hargne",
-  'derrière chaque',
-  'produit.',
+  'des résultats,',
+  'enfin.',
+  'Ce produit j\'l\'ai arraché',
 ]
 
 const linesVisible = reactive(Array(mobileLines.length).fill(false))
-const mobileTextRef = ref(null)
 const lineRefs = []
-let timeouts = []
-let containerObserver = null
+let observers = []
 
 onMounted(() => {
-  if (!mobileTextRef.value) return
-
-  containerObserver = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        containerObserver.disconnect()
-        mobileLines.forEach((_, i) => {
-          const t = setTimeout(() => {
-            linesVisible[i] = true
-          }, 400 + i * 550)
-          timeouts.push(t)
-        })
-      }
-    },
-    { threshold: 0.15 }
-  )
-  containerObserver.observe(mobileTextRef.value)
+  lineRefs.forEach((el, i) => {
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          linesVisible[i] = true
+          obs.disconnect()
+        }
+      },
+      { rootMargin: '0px 0px 100px 0px' }
+    )
+    obs.observe(el)
+    observers.push(obs)
+  })
 })
 
 onUnmounted(() => {
-  timeouts.forEach(t => clearTimeout(t))
-  if (containerObserver) containerObserver.disconnect()
+  observers.forEach(o => o.disconnect())
 })
 
 const photosA = [
@@ -69,7 +60,7 @@ const photosB = [
 </script>
 
 <template>
-  <section class="origine" id="origine">
+  <section class="origine" id="origine" ref="sectionRef">
 
     <!-- Strip A — rangée haut (desktop) / colonne gauche (mobile) -->
     <div class="strip strip-a">
@@ -106,7 +97,7 @@ const photosB = [
     </div>
 
     <!-- Texte central mobile — lignes animées au scroll -->
-    <div class="mobile-text" ref="mobileTextRef">
+    <div class="mobile-text">
       <span
         v-for="(line, i) in mobileLines"
         :key="i"
@@ -220,11 +211,13 @@ const photosB = [
 }
 
 .date-desc {
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  letter-spacing: 0.2em;
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 700;
+  text-align: center;
 }
 
 /* ── Strips (desktop = lignes horizontales) ── */
@@ -314,6 +307,7 @@ const photosB = [
     border-left: none;
     border-right: none;
     border-bottom: 1px solid var(--color-border);
+    min-height: 600px;
   }
   .col-right {
     border-top: 1px solid var(--color-border);
@@ -331,7 +325,7 @@ const photosB = [
     flex-direction: column;
     border: none;
     height: 100%;
-    min-height: 400px;
+    min-height: 700px;
   }
 
   .strip-a {
@@ -392,10 +386,6 @@ const photosB = [
     color: rgba(255,255,255,0.35);
   }
 
-  .mobile-line:nth-child(2) {
-    color: rgba(255,255,255,0.15);
-    font-size: clamp(0.9rem, 4vw, 1.2rem);
-  }
 
   .mobile-line.line-in {
     opacity: 1;

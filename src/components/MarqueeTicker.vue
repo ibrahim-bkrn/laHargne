@@ -1,36 +1,43 @@
 <script setup>
-/**
- * MarqueeTicker.vue — Bandeau texte défilant en boucle infinie
- *
- * ✏️ Modifiez `phrases` pour changer le texte du ticker.
- * Le contenu est dupliqué pour créer une boucle seamless.
- */
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const phrases = [
   "T'AS LA HARGNE OU T'AS PAS",
-  'PORTER LAHARGNE C\'EST UN ÉTAT D\'ESPRIT',
+  "PORTER LAHARGNE C'EST UN ÉTAT D'ESPRIT",
   'CHAQUE JOUR EST UN COMBAT',
   'HABILLE-TOI EN CONSÉQUENCE',
-  'LA HARGNE — C\'EST UN CHOIX',
+  "LA HARGNE — C'EST UN CHOIX",
   'COLLECTION 2025',
 ]
 
-// Séparateur entre chaque phrase
 const separator = '—'
+
+const trackRef = ref(null)
+const offsetPx = ref(0)
+
+function handleScroll() {
+  if (!trackRef.value) return
+  const groupWidth = trackRef.value.scrollWidth / 3
+  offsetPx.value = -(window.scrollY * 0.4) % groupWidth
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll, { passive: true })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <template>
   <div class="ticker" aria-hidden="true">
-    <div class="ticker-track">
-      <!--
-        Le contenu est répété 3 fois pour garantir une boucle
-        seamless quelle que soit la largeur d'écran.
-      -->
-      <span
-        v-for="n in 3"
-        :key="n"
-        class="ticker-group"
-      >
+    <div
+      class="ticker-track"
+      ref="trackRef"
+      :style="{ transform: `translateX(${offsetPx}px)` }"
+    >
+      <span v-for="n in 3" :key="n" class="ticker-group">
         <template v-for="(phrase, i) in phrases" :key="i">
           <span class="ticker-phrase">{{ phrase }}</span>
           <span class="ticker-sep">{{ separator }}</span>
@@ -48,21 +55,13 @@ const separator = '—'
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
   padding: 14px 0;
-  /* Empêche le sélection du texte pendant le défilement */
   user-select: none;
 }
 
 .ticker-track {
   display: flex;
   width: max-content;
-  /* Animation : défilement de 0 à -33.33% (un tiers du contenu = 1 répétition) */
-  animation: ticker-scroll 28s linear infinite;
-  gap: 0;
-}
-
-/* Pause au hover */
-.ticker:hover .ticker-track {
-  animation-play-state: paused;
+  will-change: transform;
 }
 
 .ticker-group {
@@ -79,11 +78,6 @@ const separator = '—'
   color: var(--color-muted);
   white-space: nowrap;
   padding: 0 20px;
-  transition: color 0.2s ease;
-}
-
-.ticker:hover .ticker-phrase {
-  color: var(--color-text);
 }
 
 .ticker-sep {
@@ -91,22 +85,5 @@ const separator = '—'
   font-size: 0.65rem;
   color: var(--color-border);
   flex-shrink: 0;
-}
-
-@keyframes ticker-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    /* Déplace exactement d'un tiers = une répétition = loop seamless */
-    transform: translateX(-33.3333%);
-  }
-}
-
-/* Sur mobile : un peu plus rapide */
-@media (max-width: 768px) {
-  .ticker-track {
-    animation-duration: 20s;
-  }
 }
 </style>

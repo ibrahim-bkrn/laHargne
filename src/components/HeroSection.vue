@@ -60,7 +60,7 @@ function scrollToCollection() {
 
       <!-- Boutons d'action -->
       <div class="hero-cta">
-        <button class="btn-primary" style="opacity: 0.7;" @click="scrollToCollection">
+        <button class="btn-primary" style="opacity: 0.85;" @click="scrollToCollection">
           Voir la Collection
         </button>
 
@@ -100,8 +100,8 @@ function scrollToCollection() {
 /* ---- Section principale ---- */
 .hero {
   position: relative;
-  height: 100vh;
-  min-height: 620px;
+  height: 780px;
+  min-height: 680px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -305,8 +305,7 @@ function scrollToCollection() {
 /* ---- Responsive ---- */
 @media (max-width: 768px) {
   .hero {
-    height: 90vh;
-    min-height: 480px;
+    height: 700px;
   }
 
   .hero-title {

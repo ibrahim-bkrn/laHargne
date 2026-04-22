@@ -6,7 +6,7 @@
  * Modifiez `product` pour mettre à jour les infos.
  * Modifiez `product.variants` pour changer les coloris.
  */
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 defineProps({
   whatsappUrl: { type: String, required: true },
@@ -26,23 +26,25 @@ const product = {
     'Impression sérigraphie — logo LAHARGNE',
     'Fabriqué au Portugal',
   ],
-  sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+  sizes: ['XS','S', 'M', 'L', 'XL', 'XXL'],
   // ✏️ COLORIS — ajoutez l'image de chaque coloris quand vous l'avez
   variants: [
-    { id: 'blanc',    label: 'Gris foncé',     hex: '#4A4A4A', image: '',                              mockupColor: '#4A4A4A', mockupTextColor: '#111111', mockupBg: 'linear-gradient(145deg,#1e1e1e,#111)'    },
-    { id: 'noir',     label: 'Noir',           hex: '#1C1C1C', image: '/images/imageProduitNoir.png',  mockupColor: '#242424', mockupTextColor: '#ffffff',  mockupBg: 'linear-gradient(145deg,#2a2a2a,#111)'   },
-    { id: 'gris',     label: 'Gris',           hex: '#CCCCCC', image: '/images/imageProduitGris.png',  mockupColor: '#CCCCCC', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#222,#111)'      },
-    { id: 'bleu',     label: 'Bleu Marine',    hex: '#2D4B7A', image: '/images/imageProduitBleue.png', mockupColor: '#2d4b7a', mockupTextColor: '#ddeeff',  mockupBg: 'linear-gradient(145deg,#0e1824,#0d0d0d)'},
-    { id: 'kaki',     label: 'Vert clair',     hex: '#C5C7B5', image: '',                              mockupColor: '#C5C7B5', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#181e12,#0d0d0d)'},
-    { id: 'Rose',     label: 'rose',           hex: '#EFBCB9', image: '/images/imagePalge.png',                              mockupColor: '#EFBCB9', mockupTextColor: '#f5e8e8',  mockupBg: 'linear-gradient(145deg,#1e1014,#0d0d0d)'},
+    { id: 'blanc', label: 'Gris foncé',  hex: '#4A4A4A', images: ['/images/imageProduitGrisF.png', 'public/images/imageProduitGrisFace.png'], mockupColor: '#4A4A4A', mockupTextColor: '#111111', mockupBg: 'linear-gradient(145deg,#1e1e1e,#111)'     },
+    { id: 'noir',  label: 'Noir',        hex: '#1C1C1C', images: ['/images/imageProduitNoir.png',  'public/images/imageProduitNoirFace.png'], mockupColor: '#242424', mockupTextColor: '#ffffff',  mockupBg: 'linear-gradient(145deg,#2a2a2a,#111)'    },
+    { id: 'gris',  label: 'Gris',        hex: '#CCCCCC', images: ['/images/imageProduitGris.png',  'public/images/imageProduitGrisff.png'], mockupColor: '#CCCCCC', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#222,#111)'       },
+    { id: 'bleu',  label: 'Bleu Marine', hex: '#2D4B7A', images: ['/images/imageProduitBleueFoncé.png', '/images/imagePorduitBleueF.png'], mockupColor: '#2d4b7a', mockupTextColor: '#ddeeff',  mockupBg: 'linear-gradient(145deg,#0e1824,#0d0d0d)' },
+    { id: 'kaki',  label: 'Vert clair',  hex: '#C5C7B5', images: ['public/images/imageProduitVert.png', 'public/images/imageProduitVertF.png'],                              mockupColor: '#C5C7B5', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#181e12,#0d0d0d)' },
+    { id: 'Rose',  label: 'Rose',        hex: '#EFBCB9', images: ['/images/imagePalge.png', 'public/images/imageProduitRoseF.png'], mockupColor: '#EFBCB9', mockupTextColor: '#f5e8e8',  mockupBg: 'linear-gradient(145deg,#1e1014,#0d0d0d)' },
   ],
 }
 
-// Coloris sélectionné par défaut : Gris (image principale)
 const selectedVariant = ref(product.variants.find(v => v.id === 'gris') ?? product.variants[0])
+const selectedImageIndex = ref(0)
 
-// Image ou mockup à afficher selon le coloris actif
-const activeImage = computed(() => selectedVariant.value.image)
+watch(selectedVariant, () => { selectedImageIndex.value = 0 })
+
+const activeImage = computed(() => selectedVariant.value.images[selectedImageIndex.value] ?? '')
+const visibleThumbs = computed(() => selectedVariant.value.images.filter(img => img !== ''))
 
 function openProductPage() {
   // Passe le produit + la variante active à la page détail
@@ -86,49 +88,39 @@ function openProductPage() {
 
         <!-- ===== VISUEL ===== -->
         <div class="feature-visual" v-scroll-reveal>
-          <!-- Photo réelle si disponible -->
+
+          <!-- Image principale -->
           <img
             v-if="activeImage"
             :src="activeImage"
             :alt="`${product.name} — ${selectedVariant.label}`"
             class="feature-img"
           />
-
-          <!-- Mockup SVG réactif au coloris sélectionné -->
           <div
             v-else
             class="feature-mockup"
             :style="{ background: selectedVariant.mockupBg }"
             aria-hidden="true"
           >
-            <svg
-              class="mockup-tee"
-              viewBox="0 0 220 260"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <svg class="mockup-tee" viewBox="0 0 220 260" fill="none" xmlns="http://www.w3.org/2000/svg">
               <ellipse cx="110" cy="254" rx="80" ry="7" fill="rgba(0,0,0,0.3)" />
-              <path
-                d="M 68,10 C 82,32 138,32 152,10 L 220,38 L 196,72 L 165,60 L 165,248 L 55,248 L 55,60 L 24,72 L 0,38 Z"
-                :fill="selectedVariant.mockupColor"
-              />
-              <path
-                d="M 68,10 C 82,32 138,32 152,10 C 138,4 82,4 68,10 Z"
-                :fill="selectedVariant.mockupColor"
-                stroke="rgba(0,0,0,0.07)" stroke-width="1"
-              />
+              <path d="M 68,10 C 82,32 138,32 152,10 L 220,38 L 196,72 L 165,60 L 165,248 L 55,248 L 55,60 L 24,72 L 0,38 Z" :fill="selectedVariant.mockupColor" />
+              <path d="M 68,10 C 82,32 138,32 152,10 C 138,4 82,4 68,10 Z" :fill="selectedVariant.mockupColor" stroke="rgba(0,0,0,0.07)" stroke-width="1" />
               <line x1="55" y1="60" x2="165" y2="60" stroke="rgba(0,0,0,0.06)" stroke-width="1" />
-              <text
-                x="110" y="162" text-anchor="middle" dominant-baseline="middle"
-                font-family="Anton, sans-serif" font-size="24" letter-spacing="5"
-                :fill="selectedVariant.mockupTextColor" opacity="0.88"
-              >LAHARGNE</text>
-              <line
-                x1="80" y1="176" x2="140" y2="176"
-                :stroke="selectedVariant.mockupTextColor"
-                stroke-width="0.7" opacity="0.35"
-              />
+              <text x="110" y="162" text-anchor="middle" dominant-baseline="middle" font-family="Anton, sans-serif" font-size="24" letter-spacing="5" :fill="selectedVariant.mockupTextColor" opacity="0.88">LAHARGNE</text>
+              <line x1="80" y1="176" x2="140" y2="176" :stroke="selectedVariant.mockupTextColor" stroke-width="0.7" opacity="0.35" />
             </svg>
+          </div>
+
+          <!-- Miniatures (si plusieurs photos pour ce coloris) -->
+          <div class="thumb-row" v-if="visibleThumbs.length > 1">
+            <button
+              v-for="(img, idx) in visibleThumbs"
+              :key="idx"
+              class="thumb-btn-inline"
+              :class="{ active: selectedImageIndex === idx }"
+              @click="selectedImageIndex = idx"
+            ><img :src="img" :alt="`Vue ${idx + 1}`" /></button>
           </div>
 
           <!-- Indicateur coloris actif sous le visuel -->
@@ -173,7 +165,6 @@ function openProductPage() {
             </div>
           </div>
 
-          <div class="feature-divider"></div>
 
           <!-- Détails produit (composition) -->
           <ul class="feature-details">
@@ -195,6 +186,56 @@ function openProductPage() {
 </template>
 
 <style scoped>
+/* ── Visuel inner : image + miniatures côte à côte ── */
+.visual-inner {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.visual-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Miniatures en colonne ── */
+.thumb-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 64px;
+  flex-shrink: 0;
+}
+
+.thumb-btn {
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--color-border);
+  background: none;
+  padding: 2px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.thumb-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.thumb-btn.active {
+  border-color: var(--color-accent);
+}
+
+.thumb-btn:hover {
+  border-color: rgba(255,255,255,0.4);
+}
+
 .collection {
   padding: var(--spacing-section) 0;
   background-color: var(--color-bg);
@@ -236,7 +277,7 @@ function openProductPage() {
 
 .feature-img {
   width: 100%;
-  height: 85vh;
+  max-height: 600px;
   object-fit: cover;
   object-position: center center;
   border-radius: var(--border-radius);
@@ -343,6 +384,39 @@ function openProductPage() {
   color: var(--color-muted);
 }
 
+.thumb-row {
+  display: flex;
+  gap: 6px;
+}
+
+.thumb-btn-inline {
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--color-border);
+  background: none;
+  padding: 2px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.thumb-btn-inline img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.thumb-btn-inline.active {
+  border-color: var(--color-accent);
+}
+
+.thumb-btn-inline:hover {
+  border-color: rgba(255,255,255,0.4);
+}
+
 .selector-current {
   color: var(--color-accent);
   font-family: var(--font-body);
@@ -430,15 +504,16 @@ function openProductPage() {
 
   .feature-mockup,
   .feature-img {
-    aspect-ratio: 4 / 3;
-    max-height: 420px;
+    aspect-ratio: 3 / 4;
+    max-height: 75vh;
   }
 }
 
 @media (max-width: 480px) {
   .feature-mockup,
   .feature-img {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 3 / 4;
+    max-height: 80vh;
   }
 }
 </style>

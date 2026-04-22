@@ -5,43 +5,28 @@ defineProps({
     required: true,
   },
 })
-
-// ✏️ 3 images côte à côte format portrait
-const photos = [
-  { src: '/images/profilInsta.png',   alt: 'LAHARGNE — Profil Instagram' },
-  { src: '/images/IMG_8079.JPEG',    alt: 'LAHARGNE — Look 02' },
-  { src: '/images/imageDecor.png',    alt: 'LAHARGNE — Look 03' },
-]
 </script>
 
 <template>
-  <section class="lookbook" id="lookbook">
+  <section class="insta-section" id="lookbook">
     <div class="container">
 
-      <!-- En-tête -->
-      <header class="lookbook-header" v-scroll-reveal>
-        <h2 class="section-title">Lookbook</h2>
+      <header class="insta-header" v-scroll-reveal>
+        <p class="insta-tag">Instagram</p>
+        <h2 class="insta-title">Suivez l'aventure</h2>
       </header>
 
-      <!-- 3 images portrait côte à côte -->
-      <div class="lookbook-grid">
-        <div
-          v-for="(photo, i) in photos"
-          :key="i"
-          class="lookbook-item"
-          v-scroll-reveal="i * 80"
-        >
-          <img :src="photo.src" :alt="photo.alt" class="lookbook-img" />
-        </div>
+      <div class="insta-photo-wrap" v-scroll-reveal="60">
+        <img src="/images/insta.png" alt="LAHARGNE — Instagram" class="insta-photo" />
+        <div class="insta-overlay"></div>
       </div>
 
-      <!-- CTA Instagram -->
-      <div class="lookbook-cta" v-scroll-reveal="200">
+      <div class="insta-cta" v-scroll-reveal="120">
         <a
           :href="instagramUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="btn-outline"
+          class="btn-primary"
         >
           <svg
             viewBox="0 0 24 24"
@@ -50,7 +35,7 @@ const photos = [
             stroke-width="1.5"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="lookbook-ig-icon"
+            class="ig-icon"
             aria-hidden="true"
           >
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
@@ -66,72 +51,86 @@ const photos = [
 </template>
 
 <style scoped>
-.lookbook {
+.insta-section {
   padding: var(--spacing-section) 0;
   background-color: var(--color-surface);
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
 }
 
-.lookbook-header {
-  margin-bottom: 52px;
-}
-
-/* ---- Grille 3 colonnes portrait ---- */
-.lookbook-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.insta-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 12px;
+  margin-bottom: 48px;
+  text-align: center;
 }
 
-.lookbook-item {
+.insta-tag {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.insta-title {
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+.insta-photo-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
   overflow: hidden;
   border-radius: var(--border-radius);
-  background: #141414;
 }
 
-.lookbook-img {
+.insta-photo {
   width: 100%;
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
   object-position: center top;
   display: block;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), filter 0.55s ease;
+  filter: grayscale(10%);
 }
 
-.lookbook-item:hover .lookbook-img {
-  transform: scale(1.05);
-  filter: brightness(0.8);
+.insta-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 55%, rgba(5,5,5,0.7) 100%);
+  pointer-events: none;
 }
 
-/* ---- CTA ---- */
-.lookbook-cta {
-  margin-top: 52px;
+.insta-cta {
+  margin-top: 40px;
   display: flex;
   justify-content: center;
 }
 
-.lookbook-ig-icon {
+.ig-icon {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
 }
 
-/* ---- Responsive ---- */
-@media (max-width: 768px) {
-  .lookbook-grid {
-    gap: 8px;
-  }
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-@media (max-width: 480px) {
-  .lookbook-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
-  }
-
-  .lookbook-img {
-    aspect-ratio: 3 / 5;
+@media (max-width: 900px) {
+  .insta-photo {
+    aspect-ratio: 3 / 4;
+    width: auto;
   }
 }
 </style>

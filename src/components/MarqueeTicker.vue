@@ -1,43 +1,19 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-
 const phrases = [
-  "T'AS LA HARGNE OU T'AS PAS",
-  "PORTER LAHARGNE C'EST UN ÉTAT D'ESPRIT",
-  'CHAQUE JOUR EST UN COMBAT',
-  'HABILLE-TOI EN CONSÉQUENCE',
-  "LA HARGNE — C'EST UN CHOIX",
-  'COLLECTION 2025',
+  'Collection 2026',
+  'Premier Drop',
+  '10 T-shirts disponibles',
+  'Qualité premium',
+  'Fabriqué en Europe',
 ]
 
 const separator = '—'
-
-const trackRef = ref(null)
-const offsetPx = ref(0)
-
-function handleScroll() {
-  if (!trackRef.value) return
-  const groupWidth = trackRef.value.scrollWidth / 3
-  offsetPx.value = -(window.scrollY * 0.4) % groupWidth
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll, { passive: true })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
 </script>
 
 <template>
   <div class="ticker" aria-hidden="true">
-    <div
-      class="ticker-track"
-      ref="trackRef"
-      :style="{ transform: `translateX(${offsetPx}px)` }"
-    >
-      <span v-for="n in 3" :key="n" class="ticker-group">
+    <div class="ticker-track">
+      <span v-for="n in 4" :key="n" class="ticker-group">
         <template v-for="(phrase, i) in phrases" :key="i">
           <span class="ticker-phrase">{{ phrase }}</span>
           <span class="ticker-sep">{{ separator }}</span>
@@ -61,7 +37,12 @@ onUnmounted(() => {
 .ticker-track {
   display: flex;
   width: max-content;
-  will-change: transform;
+  animation: ticker-scroll 18s linear infinite;
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-25%); }
 }
 
 .ticker-group {
@@ -72,12 +53,12 @@ onUnmounted(() => {
 
 .ticker-phrase {
   font-family: var(--font-title);
-  font-size: 0.82rem;
-  letter-spacing: 0.22em;
+  font-size: 0.9rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-muted);
   white-space: nowrap;
-  padding: 0 20px;
+  padding: 0 30px;
 }
 
 .ticker-sep {

@@ -27,7 +27,7 @@ function printFlyer() { window.print() }
 
         <!-- LOGO -->
         <div class="flyer-logo-wrap">
-          <img src="/images/logoNoir.png" alt="">
+          <img src="/images/logoNoir_6_11zon.webp" alt="">
         </div>
 
         <!-- SLOGAN -->
@@ -37,19 +37,19 @@ function printFlyer() { window.print() }
 
         <!-- PHOTO FACE — pleine largeur -->
         <div class="flyer-face">
-          <img src="/images/imageDecor.png" alt="LA HARGNE — Face" />
+          <img src="/images/imageDecor_9_11zon.webp" alt="LA HARGNE — Face" />
         </div>
 
         <!-- PHOTOS 3 COLONNES -->
         <div class="flyer-photos">
           <div class="photo-col">
-            <img src="/images/imageProduitBleue.png" alt="LA HARGNE — Bleu" />
+            <img src="/images/imageProduitBleue_12_11zon.webp" alt="LA HARGNE — Bleu" />
           </div>
           <div class="photo-col photo-col--mid">
-            <img src="/images/imageProduitNoir.png" alt="LA HARGNE — Noir" />
+            <img src="/images/imageProduitNoir_19_11zon.webp" alt="LA HARGNE — Noir" />
           </div>
           <div class="photo-col">
-            <img src="/images/imageProduitGris.png" alt="LA HARGNE — Gris" />
+            <img src="/images/imageProduitGris_15_11zon.webp" alt="LA HARGNE — Gris" />
           </div>
         </div>
 
@@ -74,7 +74,7 @@ function printFlyer() { window.print() }
         <div class="flyer-bottom">
           <div class="qr-wrap">
             <img
-              src="/images/qrCode.png"
+              src="/images/qrCode_8_11zon.webp"
               alt="QR Code lahargne.fr"
               class="qr-img"
               onerror="this.style.opacity='0.1'"

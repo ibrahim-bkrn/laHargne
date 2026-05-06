@@ -70,7 +70,7 @@ onUnmounted(() => {
   <!-- Barre de navigation principale -->
   <nav class="nav" :class="{ scrolled: isScrolled }">
     <div class="nav-container">
-      <!-- Logo texte -->
+      <!-- Logo -->
       <a href="#" class="nav-logo" @click.prevent="goTo('#hero')">LAHARGNE</a>
 
       <!-- Liens desktop -->
@@ -170,16 +170,24 @@ onUnmounted(() => {
 
 /* ---- Logo ---- */
 .nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-title);
-  font-size: 1.55rem;
-  letter-spacing: 0.1em;
+  font-size: 2rem;
+  letter-spacing: 0.05em;
   color: var(--color-accent);
   text-decoration: none;
   transition: opacity var(--transition-fast);
-  /* Correction rendu optique du font Anton */
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: subpixel-antialiased;
   font-kerning: none;
+}
+
+.nav-logo-img {
+  height: 32px;
+  width: auto;
+  display: block;
 }
 .nav-logo:hover {
   opacity: 0.7;
@@ -194,8 +202,8 @@ onUnmounted(() => {
 
 .nav-link {
   font-family: var(--font-title);
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-text);
   text-decoration: none;

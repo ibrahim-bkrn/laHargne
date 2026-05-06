@@ -1,8 +1,8 @@
 <script setup>
 import { reactive, onMounted, onUnmounted } from 'vue'
 
-const imageDebut = '/images/imgProcess/aout2025.PNG'
-const imageFin   = '/images/imgProcess/avril2026.JPG'
+const imageDebut = '/images/imgProcess/aout2025_10_11zon.webp'
+const imageFin   = '/images/imgProcess/avril2026_11_11zon.webp'
 
 const mobileLines = [
   'La sérigraphie',
@@ -43,19 +43,19 @@ onUnmounted(() => {
 })
 
 const photosA = [
-  '/images/imgProcess/1.1.PNG',
-  '/images/imgProcess/1.2.JPG',
-  '/images/imgProcess/1.3.png',
-  '/images/imgProcess/1.4.jpg',
-  '/images/imgProcess/1.5.PNG',
+  '/images/imgProcess/1.1_18_11zon.webp',
+  '/images/imgProcess/1.2_1_11zon.webp',
+  '/images/imgProcess/1.3_2_11zon.webp',
+  '/images/imgProcess/1.4_3_11zon.webp',
+  '/images/imgProcess/1.5_4_11zon.webp',
 ]
 
 const photosB = [
-  '/images/imgProcess/2.1.JPG',
-  '/images/imgProcess/2.2.PNG',
-  '/images/imgProcess/2.3.PNG',
-  '/images/imgProcess/2.4.PNG',
-  '/images/imgProcess/2.5.jpg',
+  '/images/imgProcess/2.1_5_11zon.webp',
+  '/images/imgProcess/2.2_6_11zon.webp',
+  '/images/imgProcess/2.3_7_11zon.webp',
+  '/images/imgProcess/2.4_8_11zon.webp',
+  '/images/imgProcess/2.5_9_11zon.webp',
 ]
 </script>
 
@@ -216,7 +216,7 @@ const photosB = [
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.8);
-  font-weight: 700;
+  font-weight: 500;
   text-align: center;
 }
 

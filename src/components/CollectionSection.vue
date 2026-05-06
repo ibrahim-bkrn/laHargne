@@ -29,16 +29,16 @@ const product = {
   sizes: ['XS','S', 'M', 'L', 'XL', 'XXL'],
   // ✏️ COLORIS — ajoutez l'image de chaque coloris quand vous l'avez
   variants: [
-    { id: 'blanc', label: 'Gris foncé',  hex: '#4A4A4A', images: ['/images/imageProduitGrisF.png', 'public/images/imageProduitGrisFace.png'], mockupColor: '#4A4A4A', mockupTextColor: '#111111', mockupBg: 'linear-gradient(145deg,#1e1e1e,#111)'     },
-    { id: 'noir',  label: 'Noir',        hex: '#1C1C1C', images: ['/images/imageProduitNoir.png',  'public/images/imageProduitNoirFace.png'], mockupColor: '#242424', mockupTextColor: '#ffffff',  mockupBg: 'linear-gradient(145deg,#2a2a2a,#111)'    },
-    { id: 'gris',  label: 'Gris',        hex: '#CCCCCC', images: ['/images/imageProduitGris.png',  'public/images/imageProduitGrisff.png'], mockupColor: '#CCCCCC', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#222,#111)'       },
-    { id: 'bleu',  label: 'Bleu Marine', hex: '#2D4B7A', images: ['/images/imageProduitBleueFoncé.png', '/images/imagePorduitBleueF.png'], mockupColor: '#2d4b7a', mockupTextColor: '#ddeeff',  mockupBg: 'linear-gradient(145deg,#0e1824,#0d0d0d)' },
-    { id: 'kaki',  label: 'Vert clair',  hex: '#C5C7B5', images: ['public/images/imageProduitVert.png', 'public/images/imageProduitVertF.png'],                              mockupColor: '#C5C7B5', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#181e12,#0d0d0d)' },
-    { id: 'Rose',  label: 'Rose',        hex: '#EFBCB9', images: ['/images/imagePalge.png', 'public/images/imageProduitRoseF.png'], mockupColor: '#EFBCB9', mockupTextColor: '#f5e8e8',  mockupBg: 'linear-gradient(145deg,#1e1014,#0d0d0d)' },
+    { id: 'blanc', label: 'Gris foncé',  hex: '#4A4A4A', images: ['/images/imageProduitGrisF_16_11zon.webp', '/images/imageProduitGrisFace_17_11zon.webp'], mockupColor: '#4A4A4A', mockupTextColor: '#111111', mockupBg: 'linear-gradient(145deg,#1e1e1e,#111)'     },
+    { id: 'noir',  label: 'Noir',        hex: '#1C1C1C', images: ['/images/imageProduitNoir_19_11zon.webp',  '/images/imageProduitNoirFace_21_11zon.webp'], mockupColor: '#242424', mockupTextColor: '#ffffff',  mockupBg: 'linear-gradient(145deg,#2a2a2a,#111)'    },
+    { id: 'gris',  label: 'Gris',        hex: '#CCCCCC', images: ['/images/imageProduitGris - Copie_14_11zon.webp',  '/images/imageProduitGrisff_18_11zon.webp'], mockupColor: '#CCCCCC', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#222,#111)'       },
+    { id: 'bleu',  label: 'Bleu Marine', hex: '#2D4B7A', images: ['/images/imageProduitBleueFoncé_13.webp', '/images/imagePorduitBleueF_11_11zon.webp'], mockupColor: '#2d4b7a', mockupTextColor: '#ddeeff',  mockupBg: 'linear-gradient(145deg,#0e1824,#0d0d0d)' },
+    { id: 'kaki',  label: 'Vert clair',  hex: '#C5C7B5', images: ['/images/imageProduitVert_2_11zon.webp', '/images/imageProduitVertF_3_11zon.webp'],      mockupColor: '#C5C7B5', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#181e12,#0d0d0d)' },
+    { id: 'Rose',  label: 'Rose',        hex: '#EFBCB9', images: ['/images/imagePalge_10_11zon.webp', '/images/imageProduitRoseF_1_11zon.webp'], mockupColor: '#EFBCB9', mockupTextColor: '#f5e8e8',  mockupBg: 'linear-gradient(145deg,#1e1014,#0d0d0d)' },
   ],
 }
 
-const selectedVariant = ref(product.variants.find(v => v.id === 'gris') ?? product.variants[0])
+const selectedVariant = ref(product.variants.find(v => v.id === 'Rose') ?? product.variants[0])
 const selectedImageIndex = ref(0)
 
 watch(selectedVariant, () => { selectedImageIndex.value = 0 })
@@ -480,8 +480,8 @@ function openProductPage() {
 .feature-cta {
   width: 100%;
   justify-content: center;
-  padding: 18px;
-  font-size: 0.88rem;
+  padding: 14px;
+  font-size: 1.25rem;
   margin-top: 4px;
 }
 

@@ -17,7 +17,7 @@ defineProps({
       </header>
 
       <div class="insta-photo-wrap" v-scroll-reveal="60">
-        <img src="/images/insta.png" alt="LAHARGNE — Instagram" class="insta-photo" />
+        <img src="/images/insta_5_11zon.webp" alt="LAHARGNE — Instagram" class="insta-photo" />
         <div class="insta-overlay"></div>
       </div>
 

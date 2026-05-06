@@ -16,9 +16,9 @@ defineProps({
 })
 
 const heroImages = [
-  '/images/imageProduitBleue.png',
-  '/images/imageProduitNoir.png',
-  '/images/imageProduitGris - Copie.png',
+  '/images/imageProduitBleue_12_11zon.webp',
+  '/images/imageProduitNoir_19_11zon.webp',
+  '/images/imageProduitGris - Copie_14_11zon.webp',
 ]
 
 function scrollToCollection() {
@@ -41,7 +41,7 @@ function scrollToCollection() {
       />
       <!-- Image rognée pour mobile uniquement -->
       <img
-        src="/images/imageProduitNoir-responsive.png"
+        src="/images/imageProduitNoir-responsive_20_11zon.webp"
         alt=""
         class="hero-img hero-img-mobile"
         aria-hidden="true"

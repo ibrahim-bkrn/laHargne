@@ -100,12 +100,13 @@ function scrollToCollection() {
 /* ---- Section principale ---- */
 .hero {
   position: relative;
-  height: 780px;
+  height: 100dvh;
   min-height: 680px;
   display: flex;
   align-items: center;
   overflow: hidden;
 }
+
 
 /* ---- Fond ---- */
 .hero-bg {

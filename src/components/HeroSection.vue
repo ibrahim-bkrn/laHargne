@@ -63,7 +63,7 @@ function scrollToCollection() {
       <!-- Boutons d'action -->
       <div class="hero-cta">
         <button class="btn-primary" style="opacity: 0.85;" @click="scrollToCollection">
-          Voir la Collection
+          Voir la première Collection
         </button>
 
         <a
@@ -89,11 +89,6 @@ function scrollToCollection() {
           <span>Instagram</span>
         </a>
       </div>
-    </div>
-
-    <!-- Indicateur de scroll discret -->
-    <div class="scroll-indicator" aria-hidden="true">
-      <span class="scroll-line"></span>
     </div>
   </section>
 </template>
@@ -226,25 +221,6 @@ function scrollToCollection() {
   height: 18px;
 }
 
-/* ---- Indicateur de scroll ---- */
-.scroll-indicator {
-  position: absolute;
-  bottom: 44px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  animation: fade-up 1s ease 1.2s both;
-}
-
-.scroll-line {
-  display: block;
-  width: 1px;
-  height: 56px;
-  background: linear-gradient(to bottom, transparent, var(--color-border));
-  margin: 0 auto;
-  animation: scroll-pulse 2.2s ease-in-out 1.5s infinite;
-}
-
 /* ---- Animations ---- */
 /* Révélation depuis le bas — pas de fade, juste du mouvement pur */
 @keyframes line-reveal {
@@ -275,33 +251,6 @@ function scrollToCollection() {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes scroll-pulse {
-  0% {
-    transform: scaleY(0);
-    transform-origin: top;
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
-  50% {
-    transform: scaleY(1);
-    transform-origin: top;
-  }
-  51% {
-    transform-origin: bottom;
-  }
-  80% {
-    transform: scaleY(0);
-    transform-origin: bottom;
-    opacity: 0;
-  }
-  100% {
-    transform: scaleY(0);
-    opacity: 0;
   }
 }
 

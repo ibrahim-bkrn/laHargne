@@ -7,12 +7,7 @@
  * Modifiez `product.variants` pour changer les coloris.
  */
 import { ref, computed, watch } from 'vue'
-
-defineProps({
-  whatsappUrl: { type: String, required: true },
-})
-
-const emit = defineEmits(['open-product'])
+import { useCart } from '../composables/useCart'
 
 // ✏️ LE PRODUIT — un seul modèle, plusieurs coloris
 const product = {
@@ -40,15 +35,26 @@ const product = {
 
 const selectedVariant = ref(product.variants.find(v => v.id === 'Rose') ?? product.variants[0])
 const selectedImageIndex = ref(0)
+const selectedSize = ref('')
 
 watch(selectedVariant, () => { selectedImageIndex.value = 0 })
 
 const activeImage = computed(() => selectedVariant.value.images[selectedImageIndex.value] ?? '')
 const visibleThumbs = computed(() => selectedVariant.value.images.filter(img => img !== ''))
 
-function openProductPage() {
-  // Passe le produit + la variante active à la page détail
-  emit('open-product', { ...product, activeVariantId: selectedVariant.value.id })
+// Prix numérique — product.price est une chaîne formatée type "15.90 €"
+const numericPrice = computed(() => parseFloat(product.price) || 0)
+
+const { addItem } = useCart()
+
+function addToCart() {
+  addItem({
+    id: product.id,
+    nom: product.name,
+    format: selectedSize.value,
+    prix: numericPrice.value,
+    image: selectedVariant.value.images?.[0] ?? '',
+  })
 }
 </script>
 
@@ -141,8 +147,6 @@ function openProductPage() {
 
           <p class="feature-desc">{{ product.description }}</p>
 
-          <div class="feature-divider"></div>
-
           <!-- Sélecteur de coloris -->
           <div class="variant-selector">
             <div class="selector-label">
@@ -165,6 +169,26 @@ function openProductPage() {
             </div>
           </div>
 
+          <!-- Sélecteur de taille -->
+          <div class="size-selector">
+            <div class="selector-label">
+              Taille
+              <span v-if="selectedSize" class="selector-current">— {{ selectedSize }}</span>
+            </div>
+
+            <div class="size-grid">
+              <button
+                v-for="size in product.sizes"
+                :key="size"
+                class="size-btn"
+                :class="{ active: selectedSize === size }"
+                @click="selectedSize = size"
+                :aria-pressed="selectedSize === size"
+              >
+                {{ size }}
+              </button>
+            </div>
+          </div>
 
           <!-- Détails produit (composition) -->
           <ul class="feature-details">
@@ -174,9 +198,16 @@ function openProductPage() {
           </ul>
 
           <!-- CTA -->
-          <button class="btn-primary feature-cta" @click="openProductPage">
-            Voir le produit & commander
+          <button
+            class="btn-primary feature-cta"
+            :disabled="!selectedSize"
+            @click="addToCart"
+          >
+            Ajouter au panier
           </button>
+          <p class="feature-cta-hint" v-if="!selectedSize">
+            Sélectionne une taille pour ajouter au panier
+          </p>
 
         </div>
       </div>
@@ -359,11 +390,6 @@ function openProductPage() {
   color: var(--color-muted);
 }
 
-.feature-divider {
-  height: 1px;
-  background-color: var(--color-border);
-}
-
 /* Sélecteur du haut — caché sur desktop, visible sur mobile */
 .variant-selector-top {
   display: none !important;
@@ -476,6 +502,49 @@ function openProductPage() {
   flex-shrink: 0;
 }
 
+/* ---- Sélecteur taille ---- */
+.size-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.size-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.size-btn {
+  min-width: 52px;
+  height: 44px;
+  padding: 0 14px;
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.size-btn:hover {
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+
+.size-btn.active {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
 /* ---- CTA ---- */
 .feature-cta {
   width: 100%;
@@ -483,6 +552,20 @@ function openProductPage() {
   padding: 14px;
   font-size: 1.25rem;
   margin-top: 4px;
+}
+
+.feature-cta:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.feature-cta-hint {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  text-align: center;
+  opacity: 0.7;
+  margin-top: -16px;
 }
 
 /* ---- Responsive ---- */

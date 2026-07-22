@@ -8,6 +8,7 @@
  */
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import MiniCart from './MiniCart.vue'
 
 defineProps({
   instagramUrl: {
@@ -71,7 +72,9 @@ onUnmounted(() => {
   <nav class="nav" :class="{ scrolled: isScrolled }">
     <div class="nav-container">
       <!-- Logo -->
-      <a href="#" class="nav-logo" @click.prevent="goTo('#hero')">LAHARGNE</a>
+      <a href="#" class="nav-logo" @click.prevent="goTo('#hero')" aria-label="LAHARGNE — Accueil">
+        <img src="/images/logo-symbole.png" alt="LAHARGNE" class="nav-logo-img" />
+      </a>
 
       <!-- Liens desktop -->
       <ul class="nav-links">
@@ -82,18 +85,23 @@ onUnmounted(() => {
         </li>
       </ul>
 
-      <!-- Bouton hamburger (mobile uniquement) -->
-      <button
-        class="nav-burger"
-        :class="{ open: menuOpen }"
-        @click="toggleMenu"
-        :aria-label="menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'"
-        :aria-expanded="menuOpen"
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <!-- Actions à droite : panier + hamburger mobile -->
+      <div class="nav-actions">
+        <MiniCart />
+
+        <!-- Bouton hamburger (mobile uniquement) -->
+        <button
+          class="nav-burger"
+          :class="{ open: menuOpen }"
+          @click="toggleMenu"
+          :aria-label="menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'"
+          :aria-expanded="menuOpen"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </div>
   </nav>
 
@@ -227,6 +235,13 @@ onUnmounted(() => {
 }
 .nav-link:hover::after {
   width: 100%;
+}
+
+/* ---- Actions à droite (panier + hamburger) ---- */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 /* ---- Bouton hamburger ---- */

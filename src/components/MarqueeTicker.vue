@@ -1,8 +1,7 @@
 <script setup>
 const phrases = [
   'Premier Drop',
-  '10 T-shirts disponibles',
-  'Fabriqué en Europe',
+  'édition limitée',
   'Arracher la place qu\'on nous donnera jamais'
 ]
 

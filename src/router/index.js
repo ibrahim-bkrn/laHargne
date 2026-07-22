@@ -18,6 +18,16 @@ const routes = [
     component: () => import('../views/FlyerView.vue')
   },
   {
+    path: '/panier',
+    name: 'panier',
+    component: () => import('../views/PanierView.vue')
+  },
+  {
+    path: '/commander',
+    name: 'commander',
+    component: () => import('../views/CommanderView.vue')
+  },
+  {
     path: '/slogan/1',
     name: 'slogan-1',
     component: () => import('../views/slogan/Option1View.vue')
@@ -64,6 +74,14 @@ const router = createRouter({
   routes,
   scrollBehavior() {
     return { top: 0 }
+  }
+})
+
+// /commander n'est accessible qu'en venant de /panier — bloque les accès
+// directs (URL tapée à la main, lien externe, rechargement de page)
+router.beforeEach((to, from) => {
+  if (to.name === 'commander' && from.name !== 'panier') {
+    return { name: 'panier' }
   }
 })
 

@@ -52,6 +52,8 @@ function addToCart() {
     id: product.id,
     nom: product.name,
     format: selectedSize.value,
+    couleur: selectedVariant.value.label,
+    couleurHex: selectedVariant.value.hex,
     prix: numericPrice.value,
     image: selectedVariant.value.images?.[0] ?? '',
   })

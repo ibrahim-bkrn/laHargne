@@ -27,7 +27,7 @@ import AppFooter from '../components/AppFooter.vue'
 <template>
   <!-- Contenu principal -->
   <div class="app-wrapper">
-    <AppNav :instagram-url="INSTAGRAM_URL" />
+    <AppNav />
 
     <main>
       <HeroSection :instagram-url="INSTAGRAM_URL" />

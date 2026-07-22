@@ -3,34 +3,51 @@
  * MiniCart.vue — Icône panier + dropdown d'aperçu
  *
  * - Le badge affiche le nombre total d'articles (count)
- * - Le clic sur l'icône ouvre/ferme le dropdown manuellement
+ * - Le survol de l'icône affiche le dropdown (desktop) ; le clic renvoie
+ *   directement vers /panier
  * - Le dropdown s'ouvre aussi automatiquement 4s après un ajout (openMiniCart,
  *   déclenché depuis CollectionSection.vue) puis se referme seul
  */
+import { ref, computed } from 'vue'
 import { useCart } from '../composables/useCart'
 
-const { items, count, total, miniCartOpen, openMiniCart, closeMiniCart, removeItem } = useCart()
+const { items, count, total, miniCartOpen, closeMiniCart, removeItem } = useCart()
+
+// État local : dropdown affiché au survol (icône ou dropdown lui-même)
+const isHovering = ref(false)
+let hoverTimer = null
+
+const dropdownVisible = computed(() => miniCartOpen.value || isHovering.value)
+
+function handleMouseEnter() {
+  if (hoverTimer) {
+    clearTimeout(hoverTimer)
+    hoverTimer = null
+  }
+  isHovering.value = true
+}
+
+function handleMouseLeave() {
+  // Petit délai pour laisser le temps de glisser la souris vers le dropdown
+  hoverTimer = setTimeout(() => {
+    isHovering.value = false
+  }, 150)
+}
 
 function formatPrice(value) {
   return `${value.toFixed(2).replace('.', ',')} €`
-}
-
-function toggleDropdown() {
-  if (miniCartOpen.value) {
-    closeMiniCart()
-  } else {
-    openMiniCart()
-  }
 }
 </script>
 
 <template>
   <div class="mini-cart">
-    <button
+    <router-link
+      to="/panier"
       class="cart-btn"
-      @click="toggleDropdown"
-      aria-label="Aperçu du panier"
-      :aria-expanded="miniCartOpen"
+      aria-label="Voir le panier"
+      :aria-expanded="dropdownVisible"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
     >
       <svg
         class="cart-icon"
@@ -47,7 +64,7 @@ function toggleDropdown() {
         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
       </svg>
       <span v-if="count > 0" class="cart-badge">{{ count }}</span>
-    </button>
+    </router-link>
 
     <!--
       Teleporté sur <body> pour ne pas rester coincé dans le contexte
@@ -56,20 +73,27 @@ function toggleDropdown() {
     -->
     <Teleport to="body">
       <Transition name="mini-cart-fade">
-        <div v-if="miniCartOpen" class="mini-cart-dropdown" role="dialog" aria-label="Aperçu du panier">
+        <div
+          v-if="dropdownVisible"
+          class="mini-cart-dropdown"
+          role="dialog"
+          aria-label="Aperçu du panier"
+          @mouseenter="handleMouseEnter"
+          @mouseleave="handleMouseLeave"
+        >
           <p v-if="items.length === 0" class="mini-cart-empty">Ton panier est vide</p>
 
           <template v-else>
             <ul class="mini-cart-list">
-              <li v-for="item in items" :key="`${item.id}-${item.format}`" class="mini-cart-item">
+              <li v-for="item in items" :key="`${item.id}-${item.format}-${item.couleur}`" class="mini-cart-item">
                 <img v-if="item.image" :src="item.image" alt="" class="mini-cart-img" />
                 <div class="mini-cart-info">
                   <span class="mini-cart-name">{{ item.nom }}</span>
-                  <span class="mini-cart-meta">Taille {{ item.format }} × {{ item.qty }}</span>
+                  <span class="mini-cart-meta">{{ item.couleur }} — Taille {{ item.format }} × {{ item.qty }}</span>
                 </div>
                 <button
                   class="mini-cart-remove"
-                  @click="removeItem(item.id, item.format)"
+                  @click="removeItem(item.id, item.format, item.couleur)"
                   aria-label="Retirer l'article"
                 >✕</button>
               </li>

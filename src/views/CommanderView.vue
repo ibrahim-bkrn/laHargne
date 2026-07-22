@@ -41,7 +41,7 @@ function formatPrice(value) {
 
 const orderSummaryText = computed(() =>
   items.value
-    .map((i) => `${i.nom} (taille ${i.format}) x${i.qty} — ${formatPrice(i.prix * i.qty)}`)
+    .map((i) => `${i.nom} (${i.couleur}, taille ${i.format}) x${i.qty} — ${formatPrice(i.prix * i.qty)}`)
     .join('\n'),
 )
 
@@ -93,7 +93,9 @@ async function submitOrder() {
 
       <!-- Formulaire + récapitulatif -->
       <div v-else class="commander-grid">
-        <form class="commander-form" @submit.prevent="submitOrder">
+        <form id="commander-form" class="commander-form" @submit.prevent="submitOrder">
+          <router-link to="/panier" class="commander-back">← Retour au panier</router-link>
+
           <h1 class="section-title">Tes coordonnées</h1>
 
           <div class="form-row">
@@ -118,18 +120,18 @@ async function submitOrder() {
           </label>
 
           <label class="form-field">
-            <span>Adresse</span>
-            <input v-model="form.adresse" type="text" required />
+            <span>Adresse <em class="form-optional">(facultatif)</em></span>
+            <input v-model="form.adresse" type="text" />
           </label>
 
           <div class="form-row">
             <label class="form-field form-field-small">
-              <span>Code postal</span>
-              <input v-model="form.codePostal" type="text" required />
+              <span>Code postal <em class="form-optional">(facultatif)</em></span>
+              <input v-model="form.codePostal" type="text" />
             </label>
             <label class="form-field">
-              <span>Ville</span>
-              <input v-model="form.ville" type="text" required />
+              <span>Ville <em class="form-optional">(facultatif)</em></span>
+              <input v-model="form.ville" type="text" />
             </label>
           </div>
 
@@ -148,11 +150,11 @@ async function submitOrder() {
           <h2 class="commander-summary-title">Récapitulatif</h2>
 
           <ul class="commander-summary-list">
-            <li v-for="item in items" :key="`${item.id}-${item.format}`" class="commander-summary-item">
+            <li v-for="item in items" :key="`${item.id}-${item.format}-${item.couleur}`" class="commander-summary-item">
               <img v-if="item.image" :src="item.image" alt="" class="commander-summary-img" />
               <div class="commander-summary-info">
                 <span>{{ item.nom }}</span>
-                <span class="commander-summary-meta">Taille {{ item.format }} × {{ item.qty }}</span>
+                <span class="commander-summary-meta">{{ item.couleur }} — Taille {{ item.format }} × {{ item.qty }}</span>
               </div>
               <span class="commander-summary-price">{{ formatPrice(item.prix * item.qty) }}</span>
             </li>
@@ -163,6 +165,22 @@ async function submitOrder() {
             <span>{{ formatPrice(total) }}</span>
           </div>
         </aside>
+      </div>
+
+      <!-- Barre fixe mobile : total + validation, visible pendant le scroll du formulaire -->
+      <div v-if="!isSubmitted" class="commander-mobile-bar">
+        <div class="commander-mobile-total">
+          <span>Total</span>
+          <span>{{ formatPrice(total) }}</span>
+        </div>
+        <button
+          type="submit"
+          form="commander-form"
+          class="btn-primary commander-mobile-submit"
+          :disabled="isSubmitting || items.length === 0"
+        >
+          {{ isSubmitting ? 'Envoi...' : 'Valider' }}
+        </button>
       </div>
 
     </div>
@@ -200,6 +218,20 @@ async function submitOrder() {
   gap: 20px;
 }
 
+.commander-back {
+  align-self: flex-start;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.commander-back:hover {
+  color: var(--color-accent);
+}
+
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -207,7 +239,11 @@ async function submitOrder() {
 }
 
 .form-field-small {
-  max-width: 160px;
+  max-width: 200px;
+}
+
+.form-field-small span {
+  white-space: nowrap;
 }
 
 .form-field {
@@ -219,6 +255,13 @@ async function submitOrder() {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--color-muted);
+}
+
+.form-optional {
+  font-style: normal;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.6;
 }
 
 .form-field input {
@@ -334,6 +377,11 @@ async function submitOrder() {
   padding-top: 16px;
 }
 
+/* ---- Barre fixe mobile (total + validation) ---- */
+.commander-mobile-bar {
+  display: none;
+}
+
 /* ---- Responsive ---- */
 @media (max-width: 900px) {
   .commander-grid {
@@ -341,8 +389,53 @@ async function submitOrder() {
     gap: 40px;
   }
 
+  /* Le récap remonte au-dessus du formulaire, pour rester visible d'entrée */
   .commander-summary {
     position: static;
+    order: -1;
+  }
+
+  /* Le CTA du formulaire est remplacé par la barre fixe en bas */
+  .commander-submit {
+    display: none;
+  }
+
+  .commander-page {
+    padding-bottom: 110px;
+  }
+
+  .commander-mobile-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 900;
+    padding: 14px 20px;
+    background-color: rgba(26, 26, 26, 0.97);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .commander-mobile-total {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-title);
+    font-size: 1.1rem;
+    color: var(--color-accent);
+  }
+
+  .commander-mobile-submit {
+    padding: 13px 26px;
+    font-size: 0.85rem;
+  }
+
+  .commander-mobile-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 

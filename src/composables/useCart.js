@@ -5,13 +5,18 @@
  * useCart) : chaque composant qui appelle useCart() lit/modifie le même panier.
  * Persisté dans localStorage à chaque changement.
  *
- * Article de panier : { id, nom, format, prix, qty, image }
- * - id     : identifiant du produit (product.id)
- * - nom    : product.name
- * - format : taille choisie (product.sizes)
- * - prix   : prix unitaire, nombre (ex: 15.9)
- * - qty    : quantité
- * - image  : url de la variante choisie, pour l'affichage dans le panier
+ * Article de panier : { id, nom, format, couleur, couleurHex, prix, qty, image }
+ * - id         : identifiant du produit (product.id)
+ * - nom        : product.name
+ * - format     : taille choisie (product.sizes)
+ * - couleur    : label du coloris choisi (variant.label)
+ * - couleurHex : code hex du coloris (variant.hex), pour afficher une pastille
+ * - prix       : prix unitaire, nombre (ex: 15.9)
+ * - qty        : quantité
+ * - image      : url de la variante choisie, pour l'affichage dans le panier
+ *
+ * Un article est identifié de façon unique par (id, format, couleur) : même
+ * produit + même taille mais coloris différent = deux lignes séparées.
  */
 import { ref, computed, watch } from 'vue'
 
@@ -40,8 +45,10 @@ watch(
   { deep: true },
 )
 
-function findIndex(id, format) {
-  return items.value.findIndex((i) => i.id === id && i.format === format)
+function findIndex(id, format, couleur) {
+  return items.value.findIndex(
+    (i) => i.id === id && i.format === format && i.couleur === couleur,
+  )
 }
 
 function openMiniCart() {
@@ -63,7 +70,7 @@ function closeMiniCart() {
 
 function addItem(item) {
   const qty = item.qty ?? 1
-  const idx = findIndex(item.id, item.format)
+  const idx = findIndex(item.id, item.format, item.couleur)
 
   if (idx !== -1) {
     items.value[idx].qty += qty
@@ -72,6 +79,8 @@ function addItem(item) {
       id: item.id,
       nom: item.nom,
       format: item.format,
+      couleur: item.couleur ?? '',
+      couleurHex: item.couleurHex ?? '',
       prix: item.prix,
       image: item.image ?? '',
       qty,
@@ -81,13 +90,13 @@ function addItem(item) {
   openMiniCart()
 }
 
-function removeItem(id, format) {
-  const idx = findIndex(id, format)
+function removeItem(id, format, couleur) {
+  const idx = findIndex(id, format, couleur)
   if (idx !== -1) items.value.splice(idx, 1)
 }
 
-function updateQty(id, format, qty) {
-  const idx = findIndex(id, format)
+function updateQty(id, format, couleur, qty) {
+  const idx = findIndex(id, format, couleur)
   if (idx === -1) return
 
   if (qty <= 0) {

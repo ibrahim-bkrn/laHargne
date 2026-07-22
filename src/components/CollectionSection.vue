@@ -14,12 +14,12 @@ const product = {
   id: 1,
   name: 'TEE-SHIRT LAHARGNE',
   price: '15.90 €',
-  description: "L'essentiel. Un seul modèle. Six façons de l'habiter.",
+  oldPrice: '34.90 €',
+  description: 'Prix de lancement à durée limitée, retour à 34,9 € prochainement',
     details: [
     '100% coton biologique 185g/m²',
     'Coupe oversize ',
     'Impression sérigraphie — logo LAHARGNE',
-    'Fabriqué au Portugal',
   ],
   sizes: ['XS','S', 'M', 'L', 'XL', 'XXL'],
   // ✏️ COLORIS — ajoutez l'image de chaque coloris quand vous l'avez
@@ -141,8 +141,14 @@ function addToCart() {
 
           <!-- Nom & prix -->
           <div class="feature-header">
-            <h3 class="feature-name">{{ product.name }}</h3>
-            <span class="feature-price">{{ product.price }}</span>
+            <h3 class="feature-name">
+              {{ product.name }}
+              <span class="feature-badge">Édition limitée</span>
+            </h3>
+            <div class="feature-price-row">
+              <span class="feature-price">{{ product.price }}</span>
+              <span class="feature-price-old">{{ product.oldPrice }}</span>
+            </div>
           </div>
 
           <p class="feature-desc">{{ product.description }}</p>
@@ -374,6 +380,28 @@ function addToCart() {
   letter-spacing: 0.06em;
   color: var(--color-accent);
   line-height: 1.05;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.feature-badge {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-bg);
+  background-color: var(--color-accent);
+  padding: 5px 10px;
+  border-radius: var(--border-radius);
+  white-space: nowrap;
+}
+
+.feature-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
 }
 
 .feature-price {
@@ -381,6 +409,13 @@ function addToCart() {
   font-size: 2rem;
   letter-spacing: 0.04em;
   color: var(--color-text);
+}
+
+.feature-price-old {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-muted);
+  text-decoration: line-through;
 }
 
 .feature-desc {

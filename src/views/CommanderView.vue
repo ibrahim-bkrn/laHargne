@@ -16,8 +16,8 @@ useSeoMeta({
   path: '/commander',
 })
 
-// ✏️ Remplace par ton véritable endpoint Formspree (https://formspree.io/f/XXXXXXX)
-const FORM_ENDPOINT = 'https://formspree.io/f/VOTRE_ID_FORMSPREE'
+// Endpoint Formspree du client — reçoit les commandes envoyées depuis /commander
+const FORM_ENDPOINT = 'https://formspree.io/f/mvzebowj'
 
 const { items, total, clearCart } = useCart()
 

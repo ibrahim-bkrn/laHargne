@@ -14,7 +14,7 @@ const mobileLines = [
   'de la fatigue,',
   'des résultats,',
   'enfin.',
-  'Ce produit j\'l\'ai arraché',
+  'Arracher la place qu\'on nous donnera jamais',
 ]
 
 const linesVisible = reactive(Array(mobileLines.length).fill(false))

@@ -73,7 +73,8 @@ onUnmounted(() => {
     <div class="nav-container">
       <!-- Logo -->
       <a href="#" class="nav-logo" @click.prevent="goTo('#hero')" aria-label="LAHARGNE — Accueil">
-        <img src="/images/logo-symbole.png" alt="LAHARGNE" class="nav-logo-img" />
+        <img src="/images/logo-symbole.png" alt="" class="nav-logo-img" />
+        <span class="nav-logo-text">LAHARGNE</span>
       </a>
 
       <!-- Liens desktop -->
@@ -179,24 +180,30 @@ onUnmounted(() => {
 /* ---- Logo ---- */
 .nav-logo {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  font-family: var(--font-title);
-  font-size: 2rem;
-  letter-spacing: 0.05em;
-  color: var(--color-accent);
+  gap: 4px;
   text-decoration: none;
   transition: opacity var(--transition-fast);
+}
+
+.nav-logo-img {
+  /* ✏️ Taille du symbole — augmente/diminue cette valeur */
+  height: 52px;
+  width: auto;
+  display: block;
+}
+
+.nav-logo-text {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  color: var(--color-accent);
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: subpixel-antialiased;
   font-kerning: none;
 }
 
-.nav-logo-img {
-  height: 32px;
-  width: auto;
-  display: block;
-}
 .nav-logo:hover {
   opacity: 0.7;
 }
@@ -210,7 +217,7 @@ onUnmounted(() => {
 
 .nav-link {
   font-family: var(--font-title);
-  font-size: 1rem;
+  font-size: 1.3rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-text);

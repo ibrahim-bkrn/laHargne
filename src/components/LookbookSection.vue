@@ -16,9 +16,9 @@ defineProps({
         <h2 class="insta-title">Suivez l'aventure</h2>
       </header>
 
-      <div class="insta-photo-wrap" v-scroll-reveal="60">
-        <img src="/images/insta_5_11zon.webp" alt="LAHARGNE — Instagram" class="insta-photo" />
-        <div class="insta-overlay"></div>
+      <div class="insta-feed-wrap" v-scroll-reveal="60">
+        <!-- Widget Elfsight — flux Instagram en direct -->
+        <div class="elfsight-app-72547dc1-d2c2-4513-87d3-8a045ff34529" data-elfsight-app-lazy></div>
       </div>
 
       <div class="insta-cta" v-scroll-reveal="120">
@@ -84,29 +84,12 @@ defineProps({
   line-height: 1;
 }
 
-.insta-photo-wrap {
-  position: relative;
+.insta-feed-wrap {
   width: 100%;
-  max-width: 720px;
+  max-width: 960px;
   margin: 0 auto;
-  overflow: hidden;
-  border-radius: var(--border-radius);
-}
-
-.insta-photo {
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  filter: grayscale(10%);
-}
-
-.insta-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent 55%, rgba(5,5,5,0.7) 100%);
-  pointer-events: none;
+  display: flex;
+  justify-content: center;
 }
 
 .insta-cta {
@@ -127,10 +110,4 @@ defineProps({
   gap: 10px;
 }
 
-@media (max-width: 900px) {
-  .insta-photo {
-    aspect-ratio: 3 / 4;
-    width: auto;
-  }
-}
 </style>

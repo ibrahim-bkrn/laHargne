@@ -1,10 +1,9 @@
 <script setup>
 const phrases = [
-  'Collection 2026',
   'Premier Drop',
   '10 T-shirts disponibles',
-  'Qualité premium',
   'Fabriqué en Europe',
+  'Arracher la place qu\'on nous donnera jamais'
 ]
 
 const separator = '—'

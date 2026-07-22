@@ -38,6 +38,7 @@ function scrollToCollection() {
         alt=""
         class="hero-img"
         aria-hidden="true"
+        fetchpriority="high"
       />
       <!-- Image rognée pour mobile uniquement -->
       <img
@@ -45,6 +46,7 @@ function scrollToCollection() {
         alt=""
         class="hero-img hero-img-mobile"
         aria-hidden="true"
+        fetchpriority="high"
       />
     </div>
 

@@ -1,9 +1,9 @@
 <template>
   <section class="preview">
     <div class="bg">
-      <img src="/images/imageProduitBleue.png" alt="" aria-hidden="true" />
-      <img src="/images/imageProduitNoir.png" alt="" aria-hidden="true" />
-      <img src="/images/imageProduitGris - Copie.png" alt="" aria-hidden="true" class="last" />
+      <img src="/images/imageProduitBleue_12_11zon.webp" alt="" aria-hidden="true" />
+      <img src="/images/imageProduitNoir_19_11zon.webp" alt="" aria-hidden="true" />
+      <img src="/images/imageProduitGris - Copie_14_11zon.webp" alt="" aria-hidden="true" class="last" />
     </div>
     <div class="overlay" aria-hidden="true"></div>
 

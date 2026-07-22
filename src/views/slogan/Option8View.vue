@@ -1,9 +1,9 @@
 <template>
   <section class="preview">
     <div class="bg">
-      <img src="/images/imageProduitBleue.png" alt="" aria-hidden="true" />
-      <img src="/images/imageProduitNoir.png" alt="" aria-hidden="true" />
-      <img src="/images/imageProduitGris - Copie.png" alt="" aria-hidden="true" class="last" />
+      <img src="/images/imageProduitBleue_12_11zon.webp" alt="" aria-hidden="true" />
+      <img src="/images/imageProduitNoir_19_11zon.webp" alt="" aria-hidden="true" />
+      <img src="/images/imageProduitGris - Copie_14_11zon.webp" alt="" aria-hidden="true" class="last" />
     </div>
     <!-- Pas d'overlay ici : les photos passent à travers le texte -->
 
@@ -87,9 +87,9 @@
 .title span {
   display: block;
   color: transparent;
-  background-image: url('/images/imageProduitNoir.png'),
-                    url('/images/imageProduitBleue.png'),
-                    url('/images/imageProduitGris - Copie.png');
+  background-image: url('/images/imageProduitNoir_19_11zon.webp'),
+                    url('/images/imageProduitBleue_12_11zon.webp'),
+                    url('/images/imageProduitGris - Copie_14_11zon.webp');
   background-size: 33.33% 100%, 33.33% 100%, 33.33% 100%;
   background-position: 0% center, 50% center, 100% center;
   background-repeat: no-repeat;

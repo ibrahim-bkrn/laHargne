@@ -11,8 +11,8 @@ const year = new Date().getFullYear()
 <template>
   <footer class="footer">
     <div class="container footer-inner">
-      <!-- Logo texte -->
-      <span class="footer-logo" aria-label="LAHARGNE">LAHARGNE</span>
+      <!-- Logo -->
+      <img src="/images/logo-symbole.png" alt="LAHARGNE" class="footer-logo" />
 
       <!-- Copyright -->
       <!-- ✏️ Modifiez ce texte si besoin -->
@@ -49,10 +49,8 @@ const year = new Date().getFullYear()
 }
 
 .footer-logo {
-  font-family: var(--font-title);
-  font-size: 1.3rem;
-  letter-spacing: 0.18em;
-  color: var(--color-accent);
+  height: 40px;
+  width: auto;
   opacity: 0.6;
 }
 

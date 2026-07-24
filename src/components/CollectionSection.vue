@@ -30,7 +30,7 @@ const product = {
     { id: 'gris',  label: 'Gris',        hex: '#CCCCCC', images: ['/images/imageProduitGris - Copie_14_11zon.webp',  '/images/imageProduitGrisff_18_11zon.webp'], mockupColor: '#CCCCCC', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#222,#111)',       stock: { M: 1, XL: 1 } },
     { id: 'bleu',  label: 'Bleu Marine', hex: '#2D4B7A', images: ['/images/imageProduitBleueFoncé_13.webp', '/images/imagePorduitBleueF_11_11zon.webp'], mockupColor: '#2d4b7a', mockupTextColor: '#ddeeff',  mockupBg: 'linear-gradient(145deg,#0e1824,#0d0d0d)', stock: { M: 1, XL: 1 } },
     { id: 'kaki',  label: 'Vert clair',  hex: '#C5C7B5', images: ['/images/tshirt-vert_11zon.webp', '/images/imageProduitVertF_3_11zon.webp'],      mockupColor: '#C5C7B5', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#181e12,#0d0d0d)', stock: { S: 2 } },
-    { id: 'Rose',  label: 'Rose',        hex: '#EFBCB9', images: ['/images/tshirt-rose_2_11zon.webp', '/images/imageProduitRoseF_1_11zon.webp'], mockupColor: '#EFBCB9', mockupTextColor: '#f5e8e8',  mockupBg: 'linear-gradient(145deg,#1e1014,#0d0d0d)', stock: { S: 2 } },
+    { id: 'Rose',  label: 'Rose',        hex: '#EFBCB9', images: ['/images/tshirt-rose_2_11zon.webp', '/images/teeshirtrose-2_11zon.webp'], mockupColor: '#EFBCB9', mockupTextColor: '#f5e8e8',  mockupBg: 'linear-gradient(145deg,#1e1014,#0d0d0d)', stock: { S: 2 } },
   ],
 }
 

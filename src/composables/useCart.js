@@ -5,15 +5,17 @@
  * useCart) : chaque composant qui appelle useCart() lit/modifie le même panier.
  * Persisté dans localStorage à chaque changement.
  *
- * Article de panier : { id, nom, format, couleur, couleurHex, prix, qty, image }
- * - id         : identifiant du produit (product.id)
- * - nom        : product.name
- * - format     : taille choisie (product.sizes)
- * - couleur    : label du coloris choisi (variant.label)
- * - couleurHex : code hex du coloris (variant.hex), pour afficher une pastille
- * - prix       : prix unitaire, nombre (ex: 15.9)
- * - qty        : quantité
- * - image      : url de la variante choisie, pour l'affichage dans le panier
+ * Article de panier : { id, nom, format, couleur, couleurHex, prix, qty, image, precommande }
+ * - id          : identifiant du produit (product.id)
+ * - nom         : product.name
+ * - format      : taille choisie (product.sizes)
+ * - couleur     : label du coloris choisi (variant.label)
+ * - couleurHex  : code hex du coloris (variant.hex), pour afficher une pastille
+ * - prix        : prix unitaire, nombre (ex: 15.9)
+ * - qty         : quantité
+ * - image       : url de la variante choisie, pour l'affichage dans le panier
+ * - precommande : true si la taille n'était pas en stock au moment de l'ajout
+ *                 (délai de 10 à 12 jours)
  *
  * Un article est identifié de façon unique par (id, format, couleur) : même
  * produit + même taille mais coloris différent = deux lignes séparées.

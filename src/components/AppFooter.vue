@@ -12,7 +12,10 @@ const year = new Date().getFullYear()
   <footer class="footer">
     <div class="container footer-inner">
       <!-- Logo -->
-      <img src="/images/logo-symbole.png" alt="LAHARGNE" class="footer-logo" />
+      <div class="footer-logo">
+        <img src="/images/logo-symbole.png" alt="" class="footer-logo-img" />
+        <span class="footer-logo-text">LAHARGNE</span>
+      </div>
 
       <!-- Copyright -->
       <!-- ✏️ Modifiez ce texte si besoin -->
@@ -49,9 +52,23 @@ const year = new Date().getFullYear()
 }
 
 .footer-logo {
-  height: 40px;
-  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
   opacity: 0.6;
+}
+
+.footer-logo-img {
+  height: 80px;
+  width: auto;
+}
+
+.footer-logo-text {
+  font-family: var(--font-title);
+  font-size: 1.35rem;
+  letter-spacing: 0.2em;
+  color: var(--color-accent);
 }
 
 .footer-copy {

@@ -30,23 +30,32 @@ const product = {
     { id: 'gris',  label: 'Gris',        hex: '#CCCCCC', images: ['/images/imageProduitGris - Copie_14_11zon.webp',  '/images/imageProduitGrisff_18_11zon.webp'], mockupColor: '#CCCCCC', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#222,#111)',       stock: { M: 1, XL: 1 } },
     { id: 'bleu',  label: 'Bleu Marine', hex: '#2D4B7A', images: ['/images/imageProduitBleueFoncé_13.webp', '/images/imagePorduitBleueF_11_11zon.webp'], mockupColor: '#2d4b7a', mockupTextColor: '#ddeeff',  mockupBg: 'linear-gradient(145deg,#0e1824,#0d0d0d)', stock: { M: 1, XL: 1 } },
     { id: 'kaki',  label: 'Vert clair',  hex: '#C5C7B5', images: ['/images/tshirt-vert_11zon.webp', '/images/imageProduitVertF_3_11zon.webp'],      mockupColor: '#C5C7B5', mockupTextColor: '#f0f0f0',  mockupBg: 'linear-gradient(145deg,#181e12,#0d0d0d)', stock: { S: 2 } },
-    { id: 'Rose',  label: 'Rose',        hex: '#EFBCB9', images: ['/images/imagePalge_10_11zon.webp', '/images/tshirt-rose_2_11zon.webp'], mockupColor: '#EFBCB9', mockupTextColor: '#f5e8e8',  mockupBg: 'linear-gradient(145deg,#1e1014,#0d0d0d)', stock: { S: 2 } },
+    { id: 'Rose',  label: 'Rose',        hex: '#EFBCB9', images: ['/images/tshirt-rose_2_11zon.webp', '/images/imageProduitRoseF_1_11zon.webp'], mockupColor: '#EFBCB9', mockupTextColor: '#f5e8e8',  mockupBg: 'linear-gradient(145deg,#1e1014,#0d0d0d)', stock: { S: 2 } },
   ],
+}
+
+// Première taille en stock pour un coloris donné, sinon vide
+function firstAvailableSize(variant) {
+  return product.sizes.find(size => (variant.stock?.[size] ?? 0) > 0) ?? ''
 }
 
 const selectedVariant = ref(product.variants.find(v => v.id === 'Rose') ?? product.variants[0])
 const selectedImageIndex = ref(0)
-const selectedSize = ref('')
+const selectedSize = ref(firstAvailableSize(selectedVariant.value))
 
-// La disponibilité des tailles dépend du coloris choisi
+// La disponibilité des tailles dépend du coloris choisi.
+// Une taille sans stock reste sélectionnable : elle passe en précommande
+// (délai de 10 à 12 jours) plutôt que d'être bloquée.
 function isSizeAvailable(size) {
   return (selectedVariant.value.stock?.[size] ?? 0) > 0
 }
 
-watch(selectedVariant, () => {
+const isPreorder = computed(() => selectedSize.value !== '' && !isSizeAvailable(selectedSize.value))
+
+watch(selectedVariant, (variant) => {
   selectedImageIndex.value = 0
-  // La taille sélectionnée peut ne plus être dispo pour le nouveau coloris
-  if (!isSizeAvailable(selectedSize.value)) selectedSize.value = ''
+  // Présélectionne une taille disponible en stock pour le nouveau coloris
+  selectedSize.value = firstAvailableSize(variant)
 })
 
 const activeImage = computed(() => selectedVariant.value.images[selectedImageIndex.value] ?? '')
@@ -66,6 +75,7 @@ function addToCart() {
     couleurHex: selectedVariant.value.hex,
     prix: numericPrice.value,
     image: selectedVariant.value.images?.[0] ?? '',
+    precommande: isPreorder.value,
   })
 }
 </script>
@@ -199,15 +209,18 @@ function addToCart() {
                 v-for="size in product.sizes"
                 :key="size"
                 class="size-btn"
-                :class="{ active: selectedSize === size, unavailable: !isSizeAvailable(size) }"
-                :disabled="!isSizeAvailable(size)"
+                :class="{ active: selectedSize === size, preorder: !isSizeAvailable(size), 'in-stock': isSizeAvailable(size) }"
                 @click="selectedSize = size"
                 :aria-pressed="selectedSize === size"
-                :aria-label="isSizeAvailable(size) ? size : `${size} — indisponible`"
+                :aria-label="isSizeAvailable(size) ? size : `${size} — en précommande`"
               >
                 {{ size }}
               </button>
             </div>
+
+            <p v-if="isPreorder" class="size-preorder-hint">
+              Précommande — disponible sous 10 à 12 jours
+            </p>
           </div>
 
           <!-- Détails produit (composition) -->
@@ -223,7 +236,7 @@ function addToCart() {
             :disabled="!selectedSize"
             @click="addToCart"
           >
-            Ajouter au panier
+            {{ isPreorder ? 'Précommander' : 'Ajouter au panier' }}
           </button>
           <p class="feature-cta-hint" v-if="!selectedSize">
             Sélectionne une taille pour ajouter au panier
@@ -565,6 +578,7 @@ function addToCart() {
 }
 
 .size-btn {
+  position: relative;
   min-width: 52px;
   height: 44px;
   padding: 0 14px;
@@ -583,6 +597,19 @@ function addToCart() {
     background-color var(--transition-fast);
 }
 
+/* Point plein = taille disponible immédiatement (pas de précommande) */
+.size-btn.in-stock::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  opacity: 0.7;
+}
+
 .size-btn:hover {
   border-color: var(--color-text);
   color: var(--color-text);
@@ -594,17 +621,16 @@ function addToCart() {
   background-color: rgba(255, 255, 255, 0.06);
 }
 
-.size-btn.unavailable {
-  color: var(--color-border);
-  border-color: var(--color-border);
-  background-color: rgba(255, 255, 255, 0.02);
-  text-decoration: line-through;
-  cursor: not-allowed;
+/* Taille sans stock : reste cliquable, juste un repère visuel discret (précommande) */
+.size-btn.preorder {
+  border-style: dashed;
 }
 
-.size-btn.unavailable:hover {
-  border-color: var(--color-border);
-  color: var(--color-border);
+.size-preorder-hint {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  opacity: 0.85;
 }
 
 /* ---- CTA ---- */

@@ -17,7 +17,7 @@
 import { ref } from 'vue'
 
 const STOCK_CSV_URL =
-  'https://docs.google.com/spreadsheets/d/1_fegG0UCCj-2yjnjAj8Fcpcil_L0Owc0dXigpB8_Ewo/export?format=csv&gid=0'
+  'https://docs.google.com/spreadsheets/d/1_fegG0UCCj-2yjnjAj8Fcpcil_L0Owc0dXigpB8_Ewo/export?format=csv'
 
 // null tant que pas chargé (ou en cas d'échec) ; sinon { [couleur]: { [taille]: qty } }
 const remoteStock = ref(null)

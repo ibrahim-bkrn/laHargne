@@ -57,7 +57,7 @@ function scrollToCollection() {
     <div class="hero-content">
       <h1 class="hero-title" aria-label="Arracher la place qu'on nous donnerai jamais.">
         <span class="word-main">Arracher</span>
-        <span class="word-sub">la place qu'on nous donnerai jamais.</span>
+        <span class="word-sub">la place qu'on nous donnera jamais.</span>
       </h1>
 
       <!-- Boutons d'action -->

@@ -8,6 +8,7 @@
  */
 import { ref, computed, watch } from 'vue'
 import { useCart } from '../composables/useCart'
+import { useStock } from '../composables/useStock'
 
 // ✏️ LE PRODUIT — un seul modèle, plusieurs coloris
 const product = {
@@ -23,7 +24,8 @@ const product = {
   ],
   sizes: ['XS','S', 'M', 'L', 'XL', 'XXL'],
   // ✏️ COLORIS — ajoutez l'image de chaque coloris quand vous l'avez
-  // stock : quantité par taille. Une taille absente ou à 0 est affichée grisée et non sélectionnable.
+  // stock : valeur de secours utilisée si la feuille Google Sheets (useStock.js)
+  // est injoignable. En temps normal, le stock réel vient de cette feuille.
   variants: [
     { id: 'blanc', label: 'Gris foncé',  hex: '#4A4A4A', images: ['/images/t-shirt-grisfonce_3_11zon.webp', '/images/tshirt-grisfonce2_1_11zon.webp'], mockupColor: '#4A4A4A', mockupTextColor: '#111111', mockupBg: 'linear-gradient(145deg,#1e1e1e,#111)',    stock: { L: 1, XXL: 1 } },
     { id: 'noir',  label: 'Noir',        hex: '#1C1C1C', images: ['/images/imageProduitNoir_19_11zon.webp',  '/images/imageProduitNoirFace_21_11zon.webp'], mockupColor: '#242424', mockupTextColor: '#ffffff',  mockupBg: 'linear-gradient(145deg,#2a2a2a,#111)',    stock: { XL: 1, L: 1 } },
@@ -34,9 +36,21 @@ const product = {
   ],
 }
 
+// Stock en direct (Google Sheets) — fetchStock() est lancé une seule fois
+// au montage ; remoteStock reste null tant que non chargé ou en cas d'échec
+const { remoteStock, fetchStock } = useStock()
+fetchStock()
+
+// Stock d'un coloris : celui de la feuille en direct si dispo, sinon la valeur
+// de secours codée en dur sur le variant
+function stockFor(variant) {
+  return remoteStock.value?.[variant.label] ?? variant.stock ?? {}
+}
+
 // Première taille en stock pour un coloris donné, sinon vide
 function firstAvailableSize(variant) {
-  return product.sizes.find(size => (variant.stock?.[size] ?? 0) > 0) ?? ''
+  const stock = stockFor(variant)
+  return product.sizes.find(size => (stock[size] ?? 0) > 0) ?? ''
 }
 
 const selectedVariant = ref(product.variants.find(v => v.id === 'Rose') ?? product.variants[0])
@@ -47,7 +61,7 @@ const selectedSize = ref(firstAvailableSize(selectedVariant.value))
 // Une taille sans stock reste sélectionnable : elle passe en précommande
 // (délai de 10 à 12 jours) plutôt que d'être bloquée.
 function isSizeAvailable(size) {
-  return (selectedVariant.value.stock?.[size] ?? 0) > 0
+  return (stockFor(selectedVariant.value)[size] ?? 0) > 0
 }
 
 const isPreorder = computed(() => selectedSize.value !== '' && !isSizeAvailable(selectedSize.value))

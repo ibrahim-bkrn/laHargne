@@ -1,4 +1,9 @@
 <script setup>
+import { useTexts } from '../composables/useTexts'
+
+const { t, fetchTexts } = useTexts()
+fetchTexts()
+
 defineProps({
   instagramUrl: {
     type: String,
@@ -12,8 +17,8 @@ defineProps({
     <div class="container">
 
       <header class="insta-header" v-scroll-reveal>
-        <p class="insta-tag">Instagram</p>
-        <h2 class="insta-title">Suivez l'aventure</h2>
+        <p class="insta-tag">{{ t('lookbook_tag', 'Instagram') }}</p>
+        <h2 class="insta-title">{{ t('lookbook_titre', "Suivez l'aventure") }}</h2>
       </header>
 
       <div class="insta-feed-wrap" v-scroll-reveal="60">
@@ -21,7 +26,7 @@ defineProps({
         <div class="elfsight-app-72547dc1-d2c2-4513-87d3-8a045ff34529" data-elfsight-app-lazy></div>
       </div>
 
-      <div class="insta-cta" v-scroll-reveal="120">
+      <div class="insta-cta" v-scroll-reveal="120" v-if="instagramUrl">
         <a
           :href="instagramUrl"
           target="_blank"
@@ -42,7 +47,7 @@ defineProps({
             <circle cx="12" cy="12" r="4" />
             <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none" />
           </svg>
-          Suivre sur Instagram
+          {{ t('lookbook_bouton_cta', 'Suivre sur Instagram') }}
         </a>
       </div>
 

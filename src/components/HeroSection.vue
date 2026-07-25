@@ -7,6 +7,10 @@
  *   Exemple : const heroImage = '/images/hero.jpg'
  *   Placez l'image dans le dossier public/ à la racine du projet.
  */
+import { useTexts } from '../composables/useTexts'
+
+const { t, fetchTexts } = useTexts()
+fetchTexts()
 
 defineProps({
   instagramUrl: {
@@ -55,18 +59,19 @@ function scrollToCollection() {
 
     <!-- ---- Contenu principal ---- -->
     <div class="hero-content">
-      <h1 class="hero-title" aria-label="Arracher la place qu'on nous donnerai jamais.">
-        <span class="word-main">Arracher</span>
-        <span class="word-sub">la place qu'on nous donnera jamais.</span>
+      <h1 class="hero-title" :aria-label="`${t('hero_titre_principal', 'Arracher')} ${t('hero_titre_secondaire', 'la place qu\'on nous donnera jamais.')}`">
+        <span class="word-main">{{ t('hero_titre_principal', 'Arracher') }}</span>
+        <span class="word-sub">{{ t('hero_titre_secondaire', "la place qu'on nous donnera jamais.") }}</span>
       </h1>
 
       <!-- Boutons d'action -->
       <div class="hero-cta">
         <button class="btn-primary" style="opacity: 0.85;" @click="scrollToCollection">
-          Voir la première Collection
+          {{ t('hero_bouton_cta', 'Voir la première Collection') }}
         </button>
 
         <a
+          v-if="instagramUrl"
           :href="instagramUrl"
           target="_blank"
           rel="noopener noreferrer"
@@ -86,7 +91,7 @@ function scrollToCollection() {
             <circle cx="12" cy="12" r="4" />
             <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none" />
           </svg>
-          <span>Instagram</span>
+          <span>{{ t('hero_lien_instagram', 'Instagram') }}</span>
         </a>
       </div>
     </div>

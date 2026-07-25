@@ -2,15 +2,24 @@
 /**
  * HomeView.vue — Version V1 de LAHARGNE
  */
+import { computed } from 'vue'
+import { useTexts } from '../composables/useTexts'
 
-// Lien Instagram officiel de la marque
-const INSTAGRAM_URL = 'https://instagram.com/lahargne'
+const { remoteTexts, fetchTexts } = useTexts()
+fetchTexts()
 
-// Numéro WhatsApp (format international, sans + ni espaces ni tirets)
-const WHATSAPP_NUMBER = '33769799093'
+// undefined (feuille pas encore chargée / injoignable) → repli codé en dur
+// '' (cellule vide dans la feuille) → lien/bouton caché par les composants enfants
+const INSTAGRAM_URL = computed(() => {
+  const v = remoteTexts.value?.instagram_url
+  return v === undefined ? 'https://instagram.com/lahargne' : v
+})
 
-// URL WhatsApp de base
-const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`
+const WHATSAPP_URL = computed(() => {
+  const v = remoteTexts.value?.whatsapp_numero
+  const numero = v === undefined ? '33769799093' : v
+  return numero ? `https://wa.me/${numero}` : ''
+})
 
 import AppNav from '../components/AppNav.vue'
 import HeroSection from '../components/HeroSection.vue'

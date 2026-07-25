@@ -2,10 +2,20 @@
 /**
  * AppFooter.vue — Pied de page minimal
  *
- * L'année est calculée dynamiquement.
- * ✏️ Modifiez le texte de copyright si besoin.
+ * L'année est calculée dynamiquement et remplace "{année}" dans le texte
+ * de copyright venant de la feuille de textes.
  */
+import { computed } from 'vue'
+import { useTexts } from '../composables/useTexts'
+
+const { t, fetchTexts } = useTexts()
+fetchTexts()
+
 const year = new Date().getFullYear()
+
+const copyText = computed(() =>
+  t('footer_copyright', '© {année} LAHARGNE — Tous droits réservés').replace('{année}', year),
+)
 </script>
 
 <template>
@@ -18,13 +28,12 @@ const year = new Date().getFullYear()
       </div>
 
       <!-- Copyright -->
-      <!-- ✏️ Modifiez ce texte si besoin -->
       <p class="footer-copy">
-        &copy; {{ year }} LAHARGNE — Tous droits réservés
+        {{ copyText }}
       </p>
 
       <p class="footer-credit">
-        Site réalisé par
+        {{ t('footer_credit_intro', 'Site réalisé par') }}
         <a
           href="https://ib-studio.fr"
           target="_blank"

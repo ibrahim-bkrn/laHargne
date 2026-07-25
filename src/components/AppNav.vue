@@ -6,18 +6,22 @@
  * - Pas de menu hamburger sur mobile : uniquement logo + panier
  * - Liens ancrés vers chaque section (scroll smooth), visibles desktop uniquement
  */
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import MiniCart from './MiniCart.vue'
+import { useTexts } from '../composables/useTexts'
+
+const { t, fetchTexts } = useTexts()
+fetchTexts()
 
 // État du scroll (pour changer le fond de la nav)
 const isScrolled = ref(false)
 
-// Liens de navigation — modifiez les labels et hrefs si besoin
-const navLinks = [
-  { label: 'Collection', href: '#collection' },
-  { label: 'Lookbook', href: '#lookbook' },
-  { label: 'Contact', href: '#contact' },
-]
+// Liens de navigation
+const navLinks = computed(() => [
+  { label: t('nav_lien_collection', 'Collection'), href: '#collection' },
+  { label: t('nav_lien_lookbook', 'Lookbook'), href: '#lookbook' },
+  { label: t('nav_lien_contact', 'Contact'), href: '#contact' },
+])
 
 function handleScroll() {
   isScrolled.value = window.scrollY > 60
@@ -47,7 +51,7 @@ onUnmounted(() => {
       <!-- Logo -->
       <a href="#" class="nav-logo" @click.prevent="goTo('#hero')" aria-label="LAHARGNE — Accueil">
         <img src="/images/logo-symbole.png" alt="" class="nav-logo-img" />
-        <span class="nav-logo-text">LAHARGNE</span>
+        <span class="nav-logo-text">{{ t('nav_logo_texte', 'LAHARGNE') }}</span>
       </a>
 
       <!-- Liens desktop -->

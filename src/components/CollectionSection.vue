@@ -9,6 +9,7 @@
 import { ref, computed, watch } from 'vue'
 import { useCart } from '../composables/useCart'
 import { useStock } from '../composables/useStock'
+import { useTexts } from '../composables/useTexts'
 
 // ✏️ LE PRODUIT — un seul modèle, plusieurs coloris
 const product = {
@@ -40,6 +41,19 @@ const product = {
 // au montage ; remoteStock reste null tant que non chargé ou en cas d'échec
 const { remoteStock, fetchStock } = useStock()
 fetchStock()
+
+// Textes en direct (même principe)
+const { remoteTexts, t, fetchTexts } = useTexts()
+fetchTexts()
+
+// Prix affiché (texte) et prix barré — le prix barré disparaît complètement
+// si sa cellule est vide dans la feuille (fin de promo), mais retombe sur
+// la valeur codée en dur si la feuille est simplement injoignable
+const displayPrice = computed(() => t('produit_prix', product.price))
+const oldPriceText = computed(() => {
+  if (remoteTexts.value === null) return product.oldPrice
+  return remoteTexts.value.produit_ancien_prix || ''
+})
 
 // Stock d'un coloris : celui de la feuille en direct si dispo, sinon la valeur
 // de secours codée en dur sur le variant
@@ -75,15 +89,15 @@ watch(selectedVariant, (variant) => {
 const activeImage = computed(() => selectedVariant.value.images[selectedImageIndex.value] ?? '')
 const visibleThumbs = computed(() => selectedVariant.value.images.filter(img => img !== ''))
 
-// Prix numérique — product.price est une chaîne formatée type "15.90 €"
-const numericPrice = computed(() => parseFloat(product.price) || 0)
+// Prix numérique — displayPrice est une chaîne formatée type "15.90 €"
+const numericPrice = computed(() => parseFloat(displayPrice.value) || 0)
 
 const { addItem } = useCart()
 
 function addToCart() {
   addItem({
     id: product.id,
-    nom: product.name,
+    nom: t('produit_nom', product.name),
     format: selectedSize.value,
     couleur: selectedVariant.value.label,
     couleurHex: selectedVariant.value.hex,
@@ -100,8 +114,7 @@ function addToCart() {
 
       <!-- En-tête -->
       <header class="collection-header" v-scroll-reveal>
-        <h2 class="section-title">Première Collection</h2>
-        <!--<span class="collection-tag">Tee-shirts — 2025</span>-->
+        <h2 class="section-title">{{ t('collection_titre_section', 'Première Collection') }}</h2>
       </header>
 
       <!-- Feature produit : image gauche + info droite -->
@@ -110,7 +123,7 @@ function addToCart() {
         <!-- ===== SÉLECTEUR COLORIS (au-dessus de l'image sur mobile) ===== -->
         <div class="variant-selector variant-selector-top">
           <div class="selector-label">
-            Coloris
+            {{ t('collection_label_coloris', 'Coloris') }}
             <span class="selector-current">— {{ selectedVariant.label }}</span>
           </div>
           <div class="swatches-row">
@@ -178,21 +191,21 @@ function addToCart() {
           <!-- Nom & prix -->
           <div class="feature-header">
             <h3 class="feature-name">
-              {{ product.name }}
-              <span class="feature-badge">Édition limitée</span>
+              {{ t('produit_nom', product.name) }}
+              <span class="feature-badge">{{ t('collection_badge_edition', 'Édition limitée') }}</span>
             </h3>
             <div class="feature-price-row">
-              <span class="feature-price">{{ product.price }}</span>
-              <span class="feature-price-old">{{ product.oldPrice }}</span>
+              <span class="feature-price">{{ displayPrice }}</span>
+              <span v-if="oldPriceText" class="feature-price-old">{{ oldPriceText }}</span>
             </div>
           </div>
 
-          <p class="feature-desc">{{ product.description }}</p>
+          <p class="feature-desc">{{ t('produit_description', product.description) }}</p>
 
           <!-- Sélecteur de coloris -->
           <div class="variant-selector">
             <div class="selector-label">
-              Coloris
+              {{ t('collection_label_coloris', 'Coloris') }}
               <span class="selector-current">— {{ selectedVariant.label }}</span>
             </div>
 
@@ -214,7 +227,7 @@ function addToCart() {
           <!-- Sélecteur de taille -->
           <div class="size-selector">
             <div class="selector-label">
-              Taille
+              {{ t('collection_label_taille', 'Taille') }}
               <span v-if="selectedSize" class="selector-current">— {{ selectedSize }}</span>
             </div>
 
@@ -233,13 +246,13 @@ function addToCart() {
             </div>
 
             <p v-if="isPreorder" class="size-preorder-hint">
-              Précommande — disponible sous 10 à 12 jours
+              {{ t('collection_hint_precommande', 'Précommande — disponible sous 10 à 12 jours') }}
             </p>
           </div>
 
           <!-- Détails produit (composition) -->
           <ul class="feature-details">
-            <li v-for="(d, i) in product.details" :key="i" class="detail-item">
+            <li v-for="(d, i) in [t('produit_detail_1', product.details[0]), t('produit_detail_2', product.details[1]), t('produit_detail_3', product.details[2])]" :key="i" class="detail-item">
               <span class="detail-dash">—</span> {{ d }}
             </li>
           </ul>
@@ -250,10 +263,10 @@ function addToCart() {
             :disabled="!selectedSize"
             @click="addToCart"
           >
-            {{ isPreorder ? 'Précommander' : 'Ajouter au panier' }}
+            {{ isPreorder ? t('collection_bouton_precommander', 'Précommander') : t('collection_bouton_ajouter', 'Ajouter au panier') }}
           </button>
           <p class="feature-cta-hint" v-if="!selectedSize">
-            Sélectionne une taille pour ajouter au panier
+            {{ t('collection_hint_cta', 'Sélectionne une taille pour ajouter au panier') }}
           </p>
 
         </div>

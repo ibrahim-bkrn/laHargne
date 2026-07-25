@@ -1,5 +1,9 @@
 <script setup>
 import { reactive, onMounted, onUnmounted } from 'vue'
+import { useTexts } from '../composables/useTexts'
+
+const { t, fetchTexts } = useTexts()
+fetchTexts()
 
 const imageDebut = '/images/imgProcess/aout2025_10_11zon.webp'
 const imageFin   = '/images/imgProcess/avril2026_11_11zon.webp'
@@ -72,14 +76,14 @@ const photosB = [
     <!-- Grande image gauche — Août 2025 -->
     <div class="col-left">
       <div class="date-top">
-        <span class="date-tag">Août 2025</span>
+        <span class="date-tag">{{ t('origine_date_debut', 'Août 2025') }}</span>
       </div>
       <div class="image-wrap">
-        <img :src="imageDebut" alt="Les débuts — Août 2025" class="main-img" />
+        <img :src="imageDebut" :alt="`Les débuts — ${t('origine_date_debut', 'Août 2025')}`" class="main-img" />
         <div class="image-overlay"></div>
       </div>
       <div class="date-bottom">
-        <p class="date-desc">Le début.. Tout à construire.</p>
+        <p class="date-desc">{{ t('origine_desc_debut', 'Le début.. Tout à construire.') }}</p>
       </div>
     </div>
 
@@ -87,12 +91,10 @@ const photosB = [
     <div class="process-text">
       <p class="process-tag">La sérigraphie</p>
       <h2 class="process-quote">
-        De la hargne<br>et du temps.
+        {{ t('origine_titre', 'De la hargne et du temps.') }}
       </h2>
       <p class="process-body">
-        Des tests, des échecs, trop de doutes, du temps perdu,
-        de la fatigue, des progrès.<br>
-        C'est de la hargne derrière chaque produit.
+        {{ t('origine_corps', "Des tests, des échecs, trop de doutes, du temps perdu, de la fatigue, des progrès. C'est de la hargne derrière chaque produit.") }}
       </p>
     </div>
 
@@ -110,14 +112,14 @@ const photosB = [
     <!-- Grande image droite — Avril 2026 -->
     <div class="col-right">
       <div class="date-top">
-        <span class="date-tag">Avril 2026</span>
+        <span class="date-tag">{{ t('origine_date_fin', 'Avril 2026') }}</span>
       </div>
       <div class="image-wrap">
-        <img :src="imageFin" alt="Aujourd'hui — Avril 2026" class="main-img" />
+        <img :src="imageFin" :alt="`Aujourd'hui — ${t('origine_date_fin', 'Avril 2026')}`" class="main-img" />
         <div class="image-overlay"></div>
       </div>
       <div class="date-bottom">
-        <p class="date-desc">Le produit. Prêt .</p>
+        <p class="date-desc">{{ t('origine_desc_fin', 'Le produit. Prêt .') }}</p>
       </div>
     </div>
 

@@ -1,9 +1,15 @@
 <script setup>
-const phrases = [
-  'Premier Drop',
-  'édition limitée',
-  'Arracher la place qu\'on nous donnera jamais'
-]
+import { computed } from 'vue'
+import { useTexts } from '../composables/useTexts'
+
+const { t, fetchTexts } = useTexts()
+fetchTexts()
+
+const phrases = computed(() => [
+  t('marquee_phrase_1', 'Premier Drop'),
+  t('marquee_phrase_2', 'édition limitée'),
+  t('marquee_phrase_3', 'Arracher la place qu\'on nous donnera jamais'),
+])
 
 const separator = '—'
 </script>

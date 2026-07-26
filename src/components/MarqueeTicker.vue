@@ -20,7 +20,6 @@ const separator = '—'
       <span v-for="n in 4" :key="n" class="ticker-group">
         <template v-for="(phrase, i) in phrases" :key="i">
           <span class="ticker-phrase">{{ phrase }}</span>
-          <span class="ticker-sep">{{ separator }}</span>
         </template>
       </span>
     </div>
